@@ -4,7 +4,7 @@ import { Html } from '@react-three/drei';
 import { XRSessionMode } from 'iwer/lib/session/XRSession';
 import { BoxObject } from '../common/BoxObject';
 import { useFrame } from '@react-three/fiber';
-import { Mesh } from 'three';
+import { Mesh, AxesHelper, GridHelper } from 'three';
 
 export default function SimpleMeshScene() {
   const [red, setRed] = useState(false);
@@ -45,6 +45,11 @@ export default function SimpleMeshScene() {
 
   return (
     <>
+      <color attach="background" args={['#111']} />
+      <ambientLight intensity={2} />
+      <pointLight position={[20, 10, -10]} intensity={2} />
+      <primitive object={new AxesHelper(2)} />
+      <primitive object={new GridHelper(20, 20)} />
       {isSupported ? (
         <BoxObject
           ref={refBox}
