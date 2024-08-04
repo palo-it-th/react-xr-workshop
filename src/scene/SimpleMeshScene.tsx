@@ -1,5 +1,5 @@
-import { useXRStore } from '@react-three/xr';
-import { useState, useRef } from 'react';
+import { useXRStore, XRStore } from '@react-three/xr';
+import { useState, useRef, useEffect } from 'react';
 import { Html } from '@react-three/drei';
 import { XRSessionMode } from 'iwer/lib/session/XRSession';
 import { BoxObject } from '../common/BoxObject';
@@ -8,7 +8,7 @@ import { Mesh } from 'three';
 
 export default function SimpleMeshScene() {
   const [red, setRed] = useState(false);
-  const internalStore = useXRStore();
+  const xrStore: XRStore = useXRStore();
   const [isSupported, setIsSupported] = useState(false);
   const refBox = useRef<Mesh>(null!);
 
@@ -20,15 +20,28 @@ export default function SimpleMeshScene() {
   });
 
   const openARSession = () => {
+    if (navigator?.xr === undefined) {
+      setIsSupported(false);
+      return;
+    }
     navigator?.xr
       ?.isSessionSupported(XRSessionMode.ImmersiveAR)
       .then((supported) => {
         setIsSupported(supported);
         if (supported) {
-          internalStore.enterAR();
+          xrStore.enterAR();
         }
       });
   };
+
+  useEffect(() => {
+    openARSession();
+    return () => {
+      xrStore.exitAR();
+    };
+  }, []);
+
+  //TODO : Implement game logic here
 
   return (
     <>
@@ -44,12 +57,7 @@ export default function SimpleMeshScene() {
         />
       ) : (
         <Html>
-          <button
-            onClick={openARSession}
-            style={{ width: '100px', height: '50px' }}
-          >
-            Enter AR
-          </button>
+          <div style={{ width: '100%' }}>AR not supported</div>
         </Html>
       )}
     </>
