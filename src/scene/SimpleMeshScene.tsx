@@ -46,24 +46,30 @@ export default function SimpleMeshScene() {
 
   return (
     <>
-      <color attach="background" args={['#111']} />
-      <ambientLight intensity={2} />
-      <pointLight position={[20, 10, -10]} intensity={2} />
-      <primitive object={new AxesHelper(2)} />
-      <primitive object={new GridHelper(20, 20)} />
       {isSupported ? (
-        <BoxObject
-          ref={refBox}
-          color={red ? 'red' : 'yellow'}
-          onClick={() => {
-            setRed(!red);
-          }}
-          position={[0, 1, -1]}
-          scale={[0.5, 0.5, 0.5]}
-        />
+        <>
+          <color attach="background" args={['#111']} />
+          <ambientLight intensity={2} />
+          <pointLight position={[20, 10, -10]} intensity={2} />
+          <primitive object={new AxesHelper(2)} />
+          <primitive object={new GridHelper(20, 20)} />
+          <BoxObject
+            ref={refBox}
+            color={red ? 'red' : 'yellow'}
+            onClick={() => {
+              setRed(!red);
+            }}
+            position={[0, 1, -1]}
+            scale={[0.5, 0.5, 0.5]}
+          />
+        </>
       ) : (
         <Html>
-          <div style={{ width: '100%', flexGrow: 1 }}>AR not supported!!!</div>
+          <div
+            style={{ width: 300, flexGrow: 1, border: 1, borderColor: 'black' }}
+          >
+            AR not supported!!!
+          </div>
         </Html>
       )}
     </>
