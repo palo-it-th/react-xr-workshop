@@ -20,6 +20,10 @@ export default function SimpleMeshScene() {
   });
 
   const openARSession = () => {
+    if (xrStore.getState().session) {
+      setIsSupported(true);
+      return;
+    }
     if (navigator?.xr === undefined) {
       setIsSupported(false);
       return;
@@ -36,9 +40,6 @@ export default function SimpleMeshScene() {
 
   useEffect(() => {
     openARSession();
-    return () => {
-      xrStore.exitAR();
-    };
   }, []);
 
   //TODO : Implement game logic here
@@ -62,7 +63,7 @@ export default function SimpleMeshScene() {
         />
       ) : (
         <Html>
-          <div style={{ width: '100%' }}>AR not supported</div>
+          <div style={{ width: '100%', flexGrow: 1 }}>AR not supported!!!</div>
         </Html>
       )}
     </>
