@@ -7,6 +7,7 @@ import {
   NormalBufferAttributes,
   Object3DEventMap,
 } from 'three';
+import useBoxBehavior from '../hooks/useBoxBehavior';
 
 interface BoxObjectProps {
   color: Color;
@@ -15,35 +16,23 @@ interface BoxObjectProps {
   scale: [number, number, number];
 }
 
-export const BoxObject = forwardRef<
-  Mesh<
-    BufferGeometry<NormalBufferAttributes>,
-    Material | Material[],
-    Object3DEventMap
-  >,
-  BoxObjectProps
->(
-  (
-    { color, onClick, position, scale }: BoxObjectProps,
-    ref: React.Ref<
-      Mesh<
-        BufferGeometry<NormalBufferAttributes>,
-        Material | Material[],
-        Object3DEventMap
-      >
-    >,
-  ) => {
-    return (
-      <mesh
-        ref={ref}
-        pointerEventsType={{ deny: 'grab' }}
-        onClick={onClick}
-        position={position}
-        scale={scale}
-      >
-        <boxGeometry />
-        <meshBasicMaterial color={color} />
-      </mesh>
-    );
-  },
-);
+export const BoxObject = ({
+  color,
+  onClick,
+  position,
+  scale,
+}: BoxObjectProps) => {
+  const { refBox } = useBoxBehavior();
+  return (
+    <mesh
+      ref={refBox}
+      pointerEventsType={{ deny: 'grab' }}
+      onClick={onClick}
+      position={position}
+      scale={scale}
+    >
+      <boxGeometry />
+      <meshBasicMaterial color={color} />
+    </mesh>
+  );
+};
