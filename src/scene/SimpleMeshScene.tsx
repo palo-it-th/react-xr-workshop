@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { PerspectiveCamera } from '@react-three/drei';
 import { BoxObject } from '../common/BoxObject';
 import SkyBox from '../common/SkyBox';
