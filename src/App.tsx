@@ -1,11 +1,9 @@
 import './App.css';
 import { Canvas } from '@react-three/fiber';
 import { createXRStore, XR } from '@react-three/xr';
-import SimpleMeshScene from './scene/SimpleMeshScene';
+import SimpleMeshScene from './scene/SimpleScene';
 import { XRSessionMode } from 'iwer/lib/session/XRSession';
 import XRButton from './common/XRButton';
-import { Html } from '@react-three/drei';
-import SkyBox from './common/SkyBox';
 
 // Add this line
 const store = createXRStore({
