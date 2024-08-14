@@ -3,6 +3,9 @@ import { Canvas } from '@react-three/fiber';
 import { createXRStore, XR } from '@react-three/xr';
 import SimpleMeshScene from './scene/SimpleMeshScene';
 import { XRSessionMode } from 'iwer/lib/session/XRSession';
+import XRButton from './common/XRButton';
+import { Html } from '@react-three/drei';
+import SkyBox from './common/SkyBox';
 
 // Add this line
 const store = createXRStore({
@@ -10,17 +13,6 @@ const store = createXRStore({
 });
 
 function App() {
-  const onEnterAR = () => {
-    navigator?.xr
-      ?.isSessionSupported(XRSessionMode.ImmersiveAR)
-      .then((supported) => {
-        if (supported) {
-          store.enterAR();
-        } else {
-          window.alert('AR is not supported on this device');
-        }
-      });
-  };
   return (
     <>
       <Canvas>
@@ -28,22 +20,21 @@ function App() {
           <SimpleMeshScene />
         </XR>
       </Canvas>
-      <div>
-        <button
-          style={{
-            position: 'absolute',
-            bottom: '1em',
-            color: 'black',
-            left: '50%',
-            translate: '-50%',
-            padding: '0.5em 1em',
-            cursor: 'pointer',
-            fontSize: '2em',
-          }}
-          onClick={onEnterAR}
-        >
-          Enter Immersive VR
-        </button>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          position: 'absolute',
+          alignItems: 'center',
+          width: '100%',
+          left: '50%',
+          top: '85%',
+          translate: '-50%',
+          justifyContent: 'space-around',
+        }}
+      >
+        <XRButton mode={XRSessionMode.ImmersiveVR} store={store} />
+        <XRButton mode={XRSessionMode.ImmersiveAR} store={store} />
       </div>
     </>
   );

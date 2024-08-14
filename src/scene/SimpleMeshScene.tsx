@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { PerspectiveCamera } from '@react-three/drei';
 import { BoxObject } from '../common/BoxObject';
+import SkyBox from '../common/SkyBox';
 
 export default function SimpleMeshScene() {
   const [red, setRed] = useState(false);
 
   return (
     <>
-      <color attach="background" args={['#111']} />
+      <SkyBox />
       <ambientLight intensity={2} />
-      <pointLight position={[20, 10, -10]} intensity={2} />
+      <pointLight position={[0, 10, 0]} intensity={30} rotation={[90, 0, 0]} />
 
       <PerspectiveCamera
         makeDefault
