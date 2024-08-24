@@ -1,6 +1,6 @@
 import { useThree } from '@react-three/fiber';
-import { CubeTextureLoader } from 'three'; // Import THREE from 'three'
-import { memo } from 'react';
+import { CubeTextureLoader, TextureLoader } from 'three'; // Import THREE from 'three'
+import { memo, useEffect } from 'react';
 
 const textSources = [
   '/space-sky-box-textures/1.jpg',
@@ -12,15 +12,14 @@ const textSources = [
 ];
 
 // Notes : Use memo to avoid reloading texture if it is rerendered.
-const SkyBox = memo(() => {
+const SpaceSkyBox = memo(() => {
   const { scene } = useThree();
+
   const loader = new CubeTextureLoader();
-
   const textures = loader.load(textSources);
-
-  // Set the scene background property to the resulting texture.
   scene.background = textures;
+
   return null;
 });
 
-export default SkyBox;
+export default SpaceSkyBox;

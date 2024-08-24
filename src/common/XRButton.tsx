@@ -4,13 +4,19 @@ import React from 'react';
 interface XRButtonProps {
   mode: XRSessionMode;
   store: any;
+  onXRRequestSuccess: (mode: XRSessionMode) => void;
 }
 
-const XRButton = ({ mode, store }: XRButtonProps) => {
+const XRButton = ({ mode, store, onXRRequestSuccess }: XRButtonProps) => {
   const onEnterXR = () => {
     navigator?.xr?.isSessionSupported(mode).then((supported) => {
       if (supported) {
-        store.enterAR();
+        if (mode === XRSessionMode.ImmersiveAR) {
+          store.enterAR();
+        } else {
+          store.enterVR();
+        }
+        onXRRequestSuccess(mode);
       } else {
         window.alert(`${mode} is not supported on this device`);
       }
