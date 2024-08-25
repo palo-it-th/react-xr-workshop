@@ -7,7 +7,8 @@ import {
   NormalBufferAttributes,
   Object3DEventMap,
 } from 'three';
-import useBoxBehavior from '../hooks/useBoxBehavior';
+import useBoxBehavior from '../../hooks/useBoxBehavior';
+import { Box } from '@react-three/drei';
 
 interface BoxObjectProps {
   color: Color;
@@ -24,15 +25,14 @@ export const BoxObject = ({
 }: BoxObjectProps) => {
   const { refBox } = useBoxBehavior();
   return (
-    <mesh
+    <Box
       ref={refBox}
       pointerEventsType={{ deny: 'grab' }}
       onClick={onClick}
       position={position}
       scale={scale}
     >
-      <boxGeometry />
-      <meshBasicMaterial color={color} />
-    </mesh>
+      <meshStandardMaterial color={color} />
+    </Box>
   );
 };

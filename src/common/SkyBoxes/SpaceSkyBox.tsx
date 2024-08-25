@@ -15,9 +15,14 @@ const textSources = [
 const SpaceSkyBox = memo(() => {
   const { scene } = useThree();
 
-  const loader = new CubeTextureLoader();
-  const textures = loader.load(textSources);
-  scene.background = textures;
+  useEffect(() => {
+    const loader = new CubeTextureLoader();
+    const textures = loader.load(textSources);
+    scene.background = textures;
+    return () => {
+      textures.dispose();
+    };
+  }, []);
 
   return null;
 });

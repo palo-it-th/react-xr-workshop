@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import { PerspectiveCamera } from '@react-three/drei';
-import { BoxObject } from '../common/BoxObject';
-import SpaceSkyBox from '../common/SpaceSkyBox';
-import { useXR, useXRStore } from '@react-three/xr';
+import { useEffect, useState } from 'react';
+import { PerspectiveCamera, Sphere } from '@react-three/drei';
+import { BoxObject } from '../common/3DObjects/BoxObject';
+import SpaceSkyBox from '../common/SkyBoxes/SpaceSkyBox';
+import { useXR } from '@react-three/xr';
 import { XRSessionMode } from 'iwer/lib/session/XRSession';
-import ClearSkyBox from '../common/ClearSkyBox';
+import ClearSkyBox from '../common/SkyBoxes/ClearSkyBox';
+import Atom from '../common/Particles/Atom';
+import { Vector3 } from 'three';
 
 interface SimpleXRSceneProps {
   sessionMode: XRSessionMode | null;
@@ -35,10 +37,14 @@ export default function SimpleXRScene({
   return (
     <>
       {shouldDisplaySkyBox ? <SpaceSkyBox /> : <ClearSkyBox />}
-
+      <Atom
+        enable={true}
+        scale={new Vector3(0.025, 0.025, 0.025)}
+        position={new Vector3(1, 1, 0)}
+      />
       {/** Make joysticks are more brighten */}
       <ambientLight intensity={2} />
-      <pointLight position={[0, 10, 0]} intensity={30} rotation={[90, 0, 0]} />
+      <directionalLight position={[0, 10, 0]} intensity={30} />
 
       <PerspectiveCamera
         makeDefault
@@ -54,6 +60,9 @@ export default function SimpleXRScene({
         position={[0, 1, -1]}
         scale={[0.5, 0.5, 0.5]}
       />
+      <Sphere scale={[0.2, 0.2, 0.2]} position={[0, 1, -1]}>
+        <meshStandardMaterial color="green" />
+      </Sphere>
     </>
   );
 }

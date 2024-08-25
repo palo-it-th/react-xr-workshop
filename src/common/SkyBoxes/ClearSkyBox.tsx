@@ -2,10 +2,14 @@ import { useThree } from '@react-three/fiber';
 import { memo } from 'react';
 import { Color } from 'three';
 
-const ClearSkyBox = memo(() => {
+interface ClearSkyBoxProps {
+  color?: Color;
+}
+
+const ClearSkyBox = memo(({ color = new Color(0, 0, 0) }: ClearSkyBoxProps) => {
   const { scene } = useThree();
 
-  scene.background = new Color(0, 0, 0);
+  scene.background = color;
   return null;
 });
 

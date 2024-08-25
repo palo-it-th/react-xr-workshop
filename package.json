@@ -18,7 +18,9 @@
     "react-dom": "^18.3.1",
     "react-error-boundary": "^4.0.13",
     "react-scripts": "5.0.1",
+    "react-three-fiber": "^6.0.13",
     "three": "^0.167.1",
+    "three.quarks": "^0.15.3",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
