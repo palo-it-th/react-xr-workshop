@@ -9,6 +9,8 @@ interface QuarkProps {
   scale?: Vector3;
   position?: Vector3;
   rotation?: Vector3;
+  onProgress?: (event: ProgressEvent) => void;
+  onError?: (err: unknown) => void;
 }
 
 const useQuark = ({
@@ -17,6 +19,8 @@ const useQuark = ({
   scale = new Vector3(1, 1, 1),
   position = new Vector3(0, 0, 0),
   rotation = new Vector3(1, 1, 1),
+  onProgress = () => {},
+  onError = () => {},
 }: QuarkProps) => {
   const [batchRenderer] = useState(new BatchedRenderer());
   const { scene } = useThree();
@@ -44,8 +48,8 @@ const useQuark = ({
         setParticleObj(obj);
         scene.add(obj);
       },
-      () => {},
-      () => {},
+      onProgress,
+      onError,
     );
     scene.add(batchRenderer);
   }, []);

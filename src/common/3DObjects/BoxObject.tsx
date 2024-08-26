@@ -1,4 +1,4 @@
-import { Color } from '@react-three/fiber';
+import { Color, ThreeEvent } from '@react-three/fiber';
 import { forwardRef } from 'react';
 import {
   BufferGeometry,
@@ -12,7 +12,7 @@ import { Box } from '@react-three/drei';
 
 interface BoxObjectProps {
   color: Color;
-  onClick: () => void;
+  onClick: (event: ThreeEvent<MouseEvent>) => void;
   position: [number, number, number];
   scale: [number, number, number];
 }
