@@ -11,7 +11,7 @@ const useBoxBehavior = () => {
   const refBox = useRef<Mesh>(null!);
   const refBoxState = useRef<BoxState>(BoxState.MovingRight);
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (refBox.current !== null) {
       refBox.current.rotation.x += delta;
       refBox.current.rotation.y -= delta;
