@@ -20,7 +20,9 @@ export default function SimpleXRScene({
   const session = useXR((state) => state.session);
   const [red, setRed] = useState(false);
   const [shouldDisplaySkyBox, setShouldDisplaySkyBox] = useState(true);
-  const [partclePosition, setPartclePosition] = useState(new Vector3(0, 0, 0));
+  const [particlePosition, setParticlePosition] = useState(
+    new Vector3(0, 0, 0),
+  );
 
   useEffect(() => {
     const mode = sessionMode;
@@ -41,7 +43,7 @@ export default function SimpleXRScene({
       <Atom
         enable={true}
         scale={new Vector3(0.02, 0.02, 0.02)}
-        position={partclePosition}
+        position={particlePosition}
       />
       {/** Make joysticks are more brighten */}
       <ambientLight intensity={2} />
@@ -61,7 +63,7 @@ export default function SimpleXRScene({
         onClick={(event) => {
           console.log('clicked', event);
           setRed(!red);
-          setPartclePosition(event.point);
+          setParticlePosition(event.point);
         }}
         position={[0, 1, -1]}
         scale={[0.5, 0.5, 0.5]}
