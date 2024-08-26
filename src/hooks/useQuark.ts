@@ -33,7 +33,7 @@ const useQuark = ({
 
   useEffect(() => {
     const loader = new QuarksLoader();
-    loader.setCrossOrigin('');
+    loader.setCrossOrigin('*');
     loader.load(
       assetUrl,
       (obj) => {
