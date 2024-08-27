@@ -24,8 +24,7 @@ const useQuark = ({
 }: QuarkProps) => {
   const [batchRenderer] = useState(new BatchedRenderer());
   const { scene } = useThree();
-  const [particleObj, setParticleObj] =
-    useState<Object3D<Object3DEventMap> | null>(null);
+  const [particleObj, setParticleObj] = useState<Object3D | null>(null);
 
   useFrame((_, delta) => {
     if (enable) batchRenderer.update(delta);
