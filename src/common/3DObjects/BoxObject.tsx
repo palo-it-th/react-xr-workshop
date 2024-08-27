@@ -15,6 +15,7 @@ interface BoxObjectProps {
   onClick: (event: ThreeEvent<MouseEvent>) => void;
   position: [number, number, number];
   scale: [number, number, number];
+  children?: React.ReactNode;
 }
 
 export const BoxObject = ({
@@ -22,6 +23,7 @@ export const BoxObject = ({
   onClick,
   position,
   scale,
+  children,
 }: BoxObjectProps) => {
   const { refBox } = useBoxBehavior();
   return (
@@ -33,6 +35,7 @@ export const BoxObject = ({
       scale={scale}
     >
       <meshStandardMaterial color={color} />
+      {children}
     </Box>
   );
 };

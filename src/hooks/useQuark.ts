@@ -37,9 +37,9 @@ const useQuark = ({
     loader.load(
       assetUrl,
       (obj) => {
-        obj.traverse((child: any) => {
+        obj.traverse((child: Object3D) => {
           if (child.type === 'ParticleEmitter') {
-            batchRenderer.addSystem(child.system);
+            batchRenderer.addSystem((child as any).system);
           }
         });
         obj.scale.set(scale.x, scale.y, scale.z);
@@ -52,6 +52,12 @@ const useQuark = ({
       onError,
     );
     scene.add(batchRenderer);
+
+    return () => {
+      // Release memory
+      scene.remove(batchRenderer);
+      scene.remove(particleObj as Object3D);
+    };
   }, []);
 
   return { particleObj };

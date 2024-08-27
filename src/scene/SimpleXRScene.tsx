@@ -4,7 +4,7 @@ import { BoxObject } from '../common/3DObjects/BoxObject';
 import SpaceSkyBox from '../common/SkyBoxes/SpaceSkyBox';
 import { useXR } from '@react-three/xr';
 import { XRSessionMode } from 'iwer/lib/session/XRSession';
-import ClearSkyBox from '../common/SkyBoxes/ClearSkyBox';
+import SolidSkyBox from '../common/SkyBoxes/SolidSkyBox';
 import Atom from '../common/Particles/Atom';
 import { Vector3 } from 'three';
 
@@ -39,7 +39,7 @@ export default function SimpleXRScene({
 
   return (
     <>
-      {shouldDisplaySkyBox ? <SpaceSkyBox /> : <ClearSkyBox />}
+      {shouldDisplaySkyBox ? <SpaceSkyBox /> : <SolidSkyBox />}
       <Atom
         enable={true}
         scale={new Vector3(0.02, 0.02, 0.02)}
@@ -58,6 +58,7 @@ export default function SimpleXRScene({
         position={[0, 1.6, 2]}
         rotation={[31, 0, 0]}
       />
+
       <BoxObject
         color={red ? 'red' : 'yellow'}
         onClick={(event) => {
@@ -65,12 +66,14 @@ export default function SimpleXRScene({
           setRed(!red);
           setParticlePosition(event.point);
         }}
-        position={[0, 1, -1]}
+        position={[0, 1.2, -2]}
         scale={[0.5, 0.5, 0.5]}
-      />
-      <Sphere scale={[0.2, 0.2, 0.2]} position={[0, 1, -1]}>
-        <meshStandardMaterial color="green" />
-      </Sphere>
+      >
+        {/** Add a sphere inside the box. Its position, rotation and scale will be local  */}
+        <Sphere scale={[0.5, 0.5, 0.5]} position={[1, 1, -1]}>
+          <meshStandardMaterial color="green" />
+        </Sphere>
+      </BoxObject>
     </>
   );
 }
