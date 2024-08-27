@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFrame, useThree } from 'react-three-fiber';
-import { Object3D, Object3DEventMap, Vector3 } from 'three';
+import { Object3D, Vector3 } from 'three';
 import { BatchedRenderer, QuarksLoader } from 'three.quarks';
 
 interface QuarkProps {
@@ -22,12 +22,12 @@ const useQuark = ({
   onProgress = () => {},
   onError = () => {},
 }: QuarkProps) => {
-  const [batchRenderer] = useState(new BatchedRenderer());
+  const batchRendererRef = useRef(new BatchedRenderer());
   const { scene } = useThree();
   const [particleObj, setParticleObj] = useState<Object3D | null>(null);
 
   useFrame((_, delta) => {
-    if (enable) batchRenderer.update(delta);
+    if (enable) batchRendererRef.current.update(delta);
   });
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const useQuark = ({
       (obj) => {
         obj.traverse((child: Object3D) => {
           if (child.type === 'ParticleEmitter') {
-            batchRenderer.addSystem((child as any).system);
+            batchRendererRef.current.addSystem((child as any).system);
           }
         });
         obj.scale.set(scale.x, scale.y, scale.z);
@@ -50,11 +50,11 @@ const useQuark = ({
       onProgress,
       onError,
     );
-    scene.add(batchRenderer);
+    scene.add(batchRendererRef.current);
 
     return () => {
       // Release memory
-      scene.remove(batchRenderer);
+      scene.remove(batchRendererRef.current);
       scene.remove(particleObj as Object3D);
     };
   }, []);
