@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
-import { PerspectiveCamera, Sphere } from '@react-three/drei';
-import { BoxObject } from '../common/3DObjects/BoxObject';
-import SpaceSkyBox from '../common/SkyBoxes/SpaceSkyBox';
+import { Vector3 } from 'three';
 import { useXR } from '@react-three/xr';
 import { XRSessionMode } from 'iwer/lib/session/XRSession';
-import SolidSkyBox from '../common/SkyBoxes/SolidSkyBox';
+import { PerspectiveCamera, Sphere } from '@react-three/drei';
+
 import Atom from '../common/Particles/Atom';
-import { Vector3 } from 'three';
+import SpaceSkyBox from '../common/SkyBoxes/SpaceSkyBox';
+import SolidSkyBox from '../common/SkyBoxes/SolidSkyBox';
+import { BoxObject } from '../common/3DObjects/BoxObject';
+import SqueakGhostWin from '../common/3DObjects/SqueakGhostWin';
 
 interface SimpleXRSceneProps {
   sessionMode: XRSessionMode | null;
@@ -55,9 +57,12 @@ export default function SimpleXRScene({
 
       <PerspectiveCamera
         makeDefault
-        position={[0, 1.6, 2]}
+        position={[0, 3.5, 4]}
         rotation={[31, 0, 0]}
       />
+
+      {/** Example render 3D Model with animation + Random spawn */}
+      <SqueakGhostWin />
 
       <BoxObject
         color={red ? 'red' : 'yellow'}

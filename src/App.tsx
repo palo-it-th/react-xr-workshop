@@ -1,15 +1,16 @@
-import { useState } from 'react';
-
 import { Canvas } from '@react-three/fiber';
+// import { OrbitControls } from '@react-three/drei';
 import { createXRStore, XR } from '@react-three/xr';
-// import { Container, Root } from '@react-three/uikit';
+import { Container, Root } from '@react-three/uikit';
+import { Progress } from '@react-three/uikit-default';
 import { XRSessionMode } from 'iwer/lib/session/XRSession';
 
-import XRButton from './common/XRButton';
 import SimpleXRScene from './scene/SimpleXRScene';
-// import TabExample from './components/uikit-example/TabExample';
+import XRButton from './components/common/XRButton';
+import { useXRSession } from './hooks/useXRSession';
 
 import './App.css';
+import { OrbitControls } from '@react-three/drei';
 
 // Add this line
 const store = createXRStore({
@@ -17,9 +18,18 @@ const store = createXRStore({
 });
 
 function App() {
-  // There is some bugs that state mode value is not match with session object.
-  // So, we store the session mode here.
-  const [sessionMode, setSessionMode] = useState<XRSessionMode | null>(null);
+  // // There is some bugs that state mode value is not match with session object.
+  // // So, we store the session mode here.
+  // const [sessionMode, setSessionMode] = useState<XRSessionMode | null>(null);
+
+  const {
+    onXRRequestChangeMode,
+    onXRRequestReset,
+    sessionMode,
+    isLoading,
+    progress,
+  } = useXRSession({ store });
+
   return (
     <>
       <Canvas>
@@ -27,20 +37,38 @@ function App() {
         <XR store={store}>
           <SimpleXRScene
             sessionMode={sessionMode}
-            onSessionEnd={() => {
-              setSessionMode(null);
-            }}
+            onSessionEnd={onXRRequestReset}
           />
         </XR>
 
         {/* Example render UIKit */}
-        {/* <Root>
+        <Root>
           <Container flexDirection={'column'}>
-            <TabExample />
+            {/* <TabExample /> */}
+            {isLoading && <Progress value={progress} width={200} />}
+
+            {sessionMode === null && !isLoading && (
+              <Container gap={20}>
+                <XRButton
+                  onClick={() =>
+                    onXRRequestChangeMode(XRSessionMode.ImmersiveVR)
+                  }
+                  label={'Enter Immersive VR'}
+                />
+                <XRButton
+                  onClick={() =>
+                    onXRRequestChangeMode(XRSessionMode.ImmersiveAR)
+                  }
+                  label={'Enter Immersive AR'}
+                />
+              </Container>
+            )}
           </Container>
-        </Root> */}
+        </Root>
       </Canvas>
-      {sessionMode === null && (
+
+      {/** TODO: REMOVE */}
+      {/* {sessionMode === null && (
         <div
           style={{
             display: 'flex',
@@ -65,7 +93,7 @@ function App() {
             onXRRequestSuccess={setSessionMode}
           />
         </div>
-      )}
+      )} */}
     </>
   );
 }
