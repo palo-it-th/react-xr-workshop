@@ -1,10 +1,15 @@
-import './App.css';
+import { useState } from 'react';
+
 import { Canvas } from '@react-three/fiber';
 import { createXRStore, XR } from '@react-three/xr';
-import SimpleXRScene from './scene/SimpleXRScene';
+// import { Container, Root } from '@react-three/uikit';
 import { XRSessionMode } from 'iwer/lib/session/XRSession';
+
 import XRButton from './common/XRButton';
-import { useState } from 'react';
+import SimpleXRScene from './scene/SimpleXRScene';
+// import TabExample from './components/uikit-example/TabExample';
+
+import './App.css';
 
 // Add this line
 const store = createXRStore({
@@ -18,6 +23,7 @@ function App() {
   return (
     <>
       <Canvas>
+        {/* <OrbitControls /> */}
         <XR store={store}>
           <SimpleXRScene
             sessionMode={sessionMode}
@@ -26,6 +32,13 @@ function App() {
             }}
           />
         </XR>
+
+        {/* Example render UIKit */}
+        {/* <Root>
+          <Container flexDirection={'column'}>
+            <TabExample />
+          </Container>
+        </Root> */}
       </Canvas>
       {sessionMode === null && (
         <div
