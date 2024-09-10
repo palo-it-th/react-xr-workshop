@@ -15,8 +15,10 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
+    "@types/lodash": "^4.17.7",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@types/uuid": "^10.0.0",
     "iwer": "^1.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -27,7 +29,9 @@
     "three.quarks": "^0.15.3",
     "typescript": "^5.0.3",
     "usehooks-ts": "^3.1.0",
-    "web-vitals": "^2.1.4"
+    "uuid": "^10.0.0",
+    "web-vitals": "^2.1.4",
+    "zustand": "^4.5.5"
   },
   "overrides": {
     "react-refresh": "0.14.2",

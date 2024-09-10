@@ -8,7 +8,8 @@ import Atom from '../common/Particles/Atom';
 import SpaceSkyBox from '../common/SkyBoxes/SpaceSkyBox';
 import SolidSkyBox from '../common/SkyBoxes/SolidSkyBox';
 import { BoxObject } from '../common/3DObjects/BoxObject';
-import SqueakGhostWin from '../common/3DObjects/SqueakGhostWin';
+// import SqueakGhostWin from '../common/3DObjects/SqueakGhostWin';
+import MonstersScene from './MonstersScene';
 
 interface SimpleXRSceneProps {
   sessionMode: XRSessionMode | null;
@@ -62,23 +63,26 @@ export default function SimpleXRScene({
       />
 
       {/** Example render 3D Model with animation + Random spawn */}
-      <SqueakGhostWin />
-
-      <BoxObject
-        color={red ? 'red' : 'yellow'}
-        onClick={(event) => {
-          console.log('clicked', event);
-          setRed(!red);
-          setParticlePosition(event.point);
-        }}
-        position={[0, 1.2, -2]}
-        scale={[0.5, 0.5, 0.5]}
-      >
-        {/** Add a sphere inside the box. Its position, rotation and scale will be local  */}
-        <Sphere scale={[0.5, 0.5, 0.5]} position={[1, 1, -1]}>
-          <meshStandardMaterial color="green" />
-        </Sphere>
-      </BoxObject>
+      {/* <SqueakGhostWin /> */}
+      {sessionMode !== null ? (
+        <MonstersScene />
+      ) : (
+        <BoxObject
+          color={red ? 'red' : 'yellow'}
+          onClick={(event) => {
+            console.log('clicked', event);
+            setRed(!red);
+            setParticlePosition(event.point);
+          }}
+          position={[0, 1.2, -2]}
+          scale={[0.5, 0.5, 0.5]}
+        >
+          {/** Add a sphere inside the box. Its position, rotation and scale will be local  */}
+          <Sphere scale={[0.5, 0.5, 0.5]} position={[1, 1, -1]}>
+            <meshStandardMaterial color="green" />
+          </Sphere>
+        </BoxObject>
+      )}
     </>
   );
 }

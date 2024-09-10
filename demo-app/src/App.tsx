@@ -5,12 +5,13 @@ import { Container, Root } from '@react-three/uikit';
 import { Progress } from '@react-three/uikit-default';
 import { XRSessionMode } from 'iwer/lib/session/XRSession';
 
-import SimpleXRScene from './scene/SimpleXRScene';
 import XRButton from './components/common/XRButton';
 import { useXRSession } from './hooks/useXRSession';
 
 import './App.css';
 import { OrbitControls } from '@react-three/drei';
+import SimpleXRScene from './scene/SimpleXRScene';
+// import MonsterSpawnScene from './scene/MonsterSpawnScene';
 
 // Add this line
 const store = createXRStore({
@@ -33,7 +34,7 @@ function App() {
   return (
     <>
       <Canvas>
-        {/* <OrbitControls /> */}
+        <OrbitControls />
         <XR store={store}>
           <SimpleXRScene
             sessionMode={sessionMode}
@@ -41,10 +42,11 @@ function App() {
           />
         </XR>
 
+        {/* <MonsterSpawnScene /> */}
+
         {/* Example render UIKit */}
         <Root>
           <Container flexDirection={'column'}>
-            {/* <TabExample /> */}
             {isLoading && <Progress value={progress} width={200} />}
 
             {sessionMode === null && !isLoading && (
