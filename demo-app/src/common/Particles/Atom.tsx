@@ -1,17 +1,11 @@
 import { Vector3 } from 'three';
 import useQuark from '../../hooks/useQuark';
 import { memo, useEffect } from 'react';
+import ParticleProps from '../Types/Particle';
 
 const RESOURCE_PATH = './particles/atom.json';
 
-interface AtomProps {
-  enable?: boolean;
-  scale?: Vector3;
-  position?: Vector3;
-  rotation?: Vector3;
-}
-
-const Atom = memo(({ enable = true, scale, position, rotation }: AtomProps) => {
+const Atom = memo(({ enable = true, scale, position, rotation }: ParticleProps) => {
   const { particleObj } = useQuark({
     enable,
     assetUrl: RESOURCE_PATH,

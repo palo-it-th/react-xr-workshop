@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useFrame, useThree } from 'react-three-fiber';
 import { Object3D, Vector3 } from 'three';
-import { BatchedRenderer, QuarksLoader } from 'three.quarks';
+import { BatchedRenderer, QuarksLoader, QuarksUtil } from 'three.quarks';
 
 interface QuarkProps {
   enable?: boolean;
@@ -11,6 +11,7 @@ interface QuarkProps {
   rotation?: Vector3;
   onProgress?: (event: ProgressEvent) => void;
   onError?: (err: unknown) => void;
+  autoDestroy?: boolean;
 }
 
 const useQuark = ({
@@ -21,10 +22,23 @@ const useQuark = ({
   rotation = new Vector3(1, 1, 1),
   onProgress = () => {},
   onError = () => {},
+  autoDestroy = true,
 }: QuarkProps) => {
   const batchRendererRef = useRef(new BatchedRenderer());
   const { scene } = useThree();
   const [particleObj, setParticleObj] = useState<Object3D | null>(null);
+
+
+  const cloneParticle = () => {
+    const clonedObj = particleObj?.clone();
+    if(clonedObj === undefined) return;
+    scene.add(clonedObj as Object3D);
+    QuarksUtil.setAutoDestroy(clonedObj, autoDestroy);
+    QuarksUtil.addToBatchRenderer(clonedObj, batchRendererRef.current);
+    QuarksUtil.play(clonedObj);
+
+    return clonedObj;
+  };
 
   useFrame((_, delta) => {
     if (enable) batchRendererRef.current.update(delta);
@@ -59,7 +73,7 @@ const useQuark = ({
     };
   }, []);
 
-  return { particleObj };
+  return { particleObj, cloneParticle };
 };
 
 export default useQuark;
