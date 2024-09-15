@@ -1,13 +1,13 @@
 import { XRSessionMode } from 'iwer/lib/session/XRSession';
 import React from 'react';
 
-interface XRButtonProps {
+interface XRButton2DProps {
   mode: XRSessionMode;
   store: any;
   onXRRequestSuccess: (mode: XRSessionMode) => void;
 }
 
-const XRButton = ({ mode, store, onXRRequestSuccess }: XRButtonProps) => {
+const XRButton2D = ({ mode, store, onXRRequestSuccess }: XRButton2DProps) => {
   const onEnterXR = () => {
     navigator?.xr?.isSessionSupported(mode).then((supported) => {
       if (supported) {
@@ -41,4 +41,4 @@ const XRButton = ({ mode, store, onXRRequestSuccess }: XRButtonProps) => {
   );
 };
 
-export default XRButton;
+export default XRButton2D;

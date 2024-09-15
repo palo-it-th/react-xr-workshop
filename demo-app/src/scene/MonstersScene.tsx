@@ -2,13 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import { Vector3 } from 'three';
 import { v4 as uuid } from 'uuid';
 
-import Drone from '../common/3DObjects/Drone';
 import { useDroneMonsterStore } from '../state/droneMonsterStore';
 import { MonsterCurrentState } from '../types/common';
 import {
   PositionScene,
   useGlobalPositionStore,
 } from '../state/globalUsedPositionStore';
+import Drone from '../components/common/3DObjects/Drone';
 
 const droneMonsterCount = 4;
 
@@ -80,7 +80,7 @@ export default function MonstersScene() {
               initialPosition={new Vector3(0, 0, -20)}
               stopAllActions={isDead}
               monsterActionState={monsters[id].monsterState}
-              onClick={(event) => {
+              onClick={(event: { stopPropagation: () => void; }) => {
                 event.stopPropagation();
                 onClick(id);
               }}

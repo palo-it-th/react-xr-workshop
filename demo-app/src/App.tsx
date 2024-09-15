@@ -5,7 +5,7 @@ import { Container, Root } from '@react-three/uikit';
 import { Progress } from '@react-three/uikit-default';
 import { XRSessionMode } from 'iwer/lib/session/XRSession';
 
-import XRButton from './components/common/XRButton';
+import XRButton from './components/common/UI/XRButton';
 import { useXRSession } from './hooks/useXRSession';
 
 import './App.css';

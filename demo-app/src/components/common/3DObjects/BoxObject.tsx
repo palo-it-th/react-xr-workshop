@@ -7,8 +7,9 @@ import {
   NormalBufferAttributes,
   Object3DEventMap,
 } from 'three';
-import useBoxBehavior from '../../hooks/useBoxBehavior';
+
 import { Box } from '@react-three/drei';
+import useBoxBehavior from '../../../hooks/useBoxBehavior';
 
 interface BoxObjectProps {
   color: Color;

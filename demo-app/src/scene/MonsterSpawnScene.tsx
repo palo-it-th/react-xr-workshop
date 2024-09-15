@@ -3,13 +3,13 @@ import { AxesHelper, GridHelper, Vector3 } from 'three';
 import { OrbitControls, Text } from '@react-three/drei';
 import { v4 as uuid } from 'uuid';
 
-import Drone from '../common/3DObjects/Drone';
 import { useDroneMonsterStore } from '../state/droneMonsterStore';
 import { MonsterCurrentState } from '../types/common';
 import {
   PositionScene,
   useGlobalPositionStore,
 } from '../state/globalUsedPositionStore';
+import Drone from '../components/common/3DObjects/Drone';
 
 const droneMonsterCount = 6;
 
@@ -86,7 +86,7 @@ export default function MonsterSpawnScene() {
               initialPosition={new Vector3(0, 0, -100)}
               stopAllActions={isDead}
               monsterActionState={monsters[id].monsterState}
-              onClick={(event) => {
+              onClick={(event: { stopPropagation: () => void; }) => {
                 event.stopPropagation();
                 onClick(id);
               }}

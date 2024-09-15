@@ -1,7 +1,7 @@
 import { memo } from "react";
-import useQuark from "../../hooks/useQuark";
-import useOneShotVFX from "../../hooks/useOneShotVFX";
-import ParticleProps from "../../types/common";
+import useQuark from "../../../hooks/useQuark";
+import useOneShotVFX from "../../../hooks/useOneShotVFX";
+import ParticleProps from "../../../types/common";
 
 
 const RESOURCE_PATH = './particles/bang-explosion.json';

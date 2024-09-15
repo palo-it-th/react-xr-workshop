@@ -4,15 +4,17 @@ import { useXR } from '@react-three/xr';
 import { XRSessionMode } from 'iwer/lib/session/XRSession';
 import { PerspectiveCamera, Sphere } from '@react-three/drei';
 
-import Atom from '../common/Particles/Atom';
-import SpaceSkyBox from '../common/SkyBoxes/SpaceSkyBox';
-import SolidSkyBox from '../common/SkyBoxes/SolidSkyBox';
-import { BoxObject } from '../common/3DObjects/BoxObject';
+import Atom from '../components/common/Particles/Atom';
+import SpaceSkyBox from '../components/common/SkyBoxes/SpaceSkyBox';
+import SolidSkyBox from '../components/common/SkyBoxes/SolidSkyBox';
+
 // import SqueakGhostWin from '../common/3DObjects/SqueakGhostWin';
-import MonstersScene from './MonstersScene';
-import BlueFrameTrail from '../common/Particles/BlueFrameTrail';
-import SqueakGhostWin from '../common/3DObjects/SqueakGhostWin';
-import BangExplosion from '../common/Particles/BangExplosion';
+//import MonstersScene from './MonstersScene';
+import BlueFrameTrail from '../components/common/Particles/BlueFrameTrail';
+
+import BangExplosion from '../components/common/Particles/BangExplosion';
+import SqueakGhostWin from '../components/common/3DObjects/SqueakGhostWin';
+import { BoxObject } from '../components/common/3DObjects/BoxObject';
 
 interface SimpleXRSceneProps {
   sessionMode: XRSessionMode | null;

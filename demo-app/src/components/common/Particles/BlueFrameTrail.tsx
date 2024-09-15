@@ -1,6 +1,6 @@
 import { memo, useEffect } from "react";
-import useQuark from "../../hooks/useQuark";
-import ParticleProps from "../../types/common";
+import useQuark from "../../../hooks/useQuark";
+import ParticleProps from "../../../types/common";
 
 const RESOURCE_PATH = './particles/blue-flamethrower.json';
 

@@ -12,9 +12,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useGraph } from '@react-three/fiber';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF, SkeletonUtils } from 'three-stdlib';
+import { MonsterCurrentState, UseSpawnMonsterBase } from '../../../types/common';
+import { useSpawnMonster } from '../../../hooks/useSpawnMonster';
 
-import { useSpawnMonster } from '../../hooks/useSpawnMonster';
-import { MonsterCurrentState, UseSpawnMonsterBase } from '../../types/common';
+
+
 
 type ActionName = 'Vertical';
 
