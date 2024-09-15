@@ -1,8 +1,7 @@
 import { memo, useEffect } from "react";
 import useQuark from "../../hooks/useQuark";
-import ParticleProps from "../Types/Particle";
-import { QuarksUtil } from "three.quarks";
 import useOneShotVFX from "../../hooks/useOneShotVFX";
+import ParticleProps from "../../types/common";
 
 
 const RESOURCE_PATH = './particles/energy-explosion.json';

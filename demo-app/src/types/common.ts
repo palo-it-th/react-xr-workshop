@@ -1,5 +1,6 @@
 import { RefObject } from 'react';
 import * as THREE from 'three';
+import { Vector3 } from 'three';
 
 export enum MonsterCurrentState {
   IDLE = 'idle',
@@ -21,4 +22,11 @@ export interface UseSpawnMonsterBase {
   onMonsterSpawned?: (position: THREE.Vector3) => void;
   usedPositions: THREE.Vector3[];
   objectSize?: number;
+}
+
+export default interface ParticleProps {
+  enable?: boolean;
+  scale?: Vector3;
+  position?: Vector3;
+  rotation?: Vector3;
 }

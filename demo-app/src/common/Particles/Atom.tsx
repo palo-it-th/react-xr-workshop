@@ -1,7 +1,6 @@
-import { Vector3 } from 'three';
 import useQuark from '../../hooks/useQuark';
 import { memo, useEffect } from 'react';
-import ParticleProps from '../Types/Particle';
+import ParticleProps from '../../types/common';
 
 const RESOURCE_PATH = './particles/atom.json';
 

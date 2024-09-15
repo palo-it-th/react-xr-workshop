@@ -1,8 +1,6 @@
 import { memo, useEffect } from "react";
 import useQuark from "../../hooks/useQuark";
-import useTestTransition from "../../hooks/useTestTransition";
-import ParticleProps from "../Types/Particle";
-import { Object3D } from "three";
+import ParticleProps from "../../types/common";
 
 const RESOURCE_PATH = './particles/blue-flamethrower.json';
 
