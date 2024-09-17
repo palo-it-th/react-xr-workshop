@@ -30,3 +30,12 @@ export default interface ParticleProps {
   position?: Vector3;
   rotation?: Vector3;
 }
+
+export interface MonsterModelBase<TAction = any> {
+  objectID: string;
+  triggerAction?: TAction;
+  stopAction?: TAction;
+  stopAllActions?: boolean;
+  monsterActionState?: MonsterCurrentState;
+  onMonsterSpawnedByObjectId?: (id: string, position: THREE.Vector3) => void;
+}

@@ -56,12 +56,12 @@ export default function SimpleXRScene({
       />
 
       <BlueFrameTrail
-      attachedObject={boxRef}
+        attachedObject={boxRef}
         enable={true}
         scale={new Vector3(0.1, 0.1, 0.1)}
-        position={new Vector3(0, 0, 0)} 
+        position={new Vector3(0, 0, 0)}
       />
-      
+
       <BangExplosion
         enable={true}
         scale={new Vector3(0.5, 0.5, 0.5)}
@@ -83,7 +83,16 @@ export default function SimpleXRScene({
       />
 
       {/** Example render 3D Model with animation + Random spawn */}
-      <SqueakGhostWin />
+      <SqueakGhostWin
+        objectID="1234"
+        usedPositions={[]}
+        triggerAction="clip_hips_s:SSC"
+        scale={0.3}
+        onClick={(event) => {
+          setRed(!red);
+          setParticlePosition(event.point);
+        }}
+      />
 
       <BoxObject
         color={red ? 'red' : 'yellow'}

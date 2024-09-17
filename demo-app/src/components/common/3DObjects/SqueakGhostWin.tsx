@@ -7,13 +7,17 @@ Source: https://sketchfab.com/3d-models/squeak-ghost-win-910d136ea33e4646ad7f10f
 Title: Squeak Ghost Win
 */
 
-import React, { useEffect, useState } from 'react';
-
+import React, { useEffect } from 'react';
 import * as THREE from 'three';
 import { GLTF, SkeletonUtils } from 'three-stdlib';
 import { useGraph } from '@react-three/fiber';
 import { useAnimations, useGLTF } from '@react-three/drei';
-import { useInterval } from 'usehooks-ts';
+import {
+  MonsterCurrentState,
+  MonsterModelBase,
+  UseSpawnMonsterBase,
+} from '../../../types/common';
+import { useSpawnMonster } from '../../../hooks/useSpawnMonster';
 
 type ActionName = 'clip_hips_s:SSC';
 
@@ -41,43 +45,58 @@ type GLTFResult = GLTF & {
   animations: GLTFAction[];
 };
 
-export default function SqueakGhostWin(props: JSX.IntrinsicElements['group']) {
-  const group = React.useRef<THREE.Group>(null);
+type MergedProps = MonsterModelBase<ActionName> & UseSpawnMonsterBase;
+type GhostActionProps = Omit<MergedProps, 'monsterRef' | 'isMonsterDead'>;
+
+export default function SqueakGhostWin(
+  props: JSX.IntrinsicElements['group'] & GhostActionProps,
+) {
+  const {
+    objectID,
+    triggerAction,
+    stopAction,
+    stopAllActions,
+    onMonsterSpawnedByObjectId,
+    respawnTimer,
+    firstSpawnTimer,
+    monsterActionState,
+    initialPosition,
+    usedPositions,
+  } = props;
+
+  const modelRef = React.useRef<THREE.Group>(null);
   const { scene, animations } = useGLTF('/3D-models/squeak_ghost_win.glb');
   const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene]);
   const { nodes, materials } = useGraph(clone) as GLTFResult;
-  const { actions } = useAnimations(animations, group);
+  const { actions } = useAnimations(animations, modelRef);
 
-  const xPositions = { min: -5, max: 5 };
-  const yPositions = { min: -5, max: 3 };
-  const [objectPos, setObjectPos] = useState({
-    x: xPositions.min,
-    y: yPositions.min,
+  useSpawnMonster({
+    monsterRef: modelRef,
+    respawnTimer,
+    firstSpawnTimer,
+    isMonsterDead: monsterActionState === MonsterCurrentState.DEAD,
+    initialPosition,
+    onMonsterSpawned: (position) => {
+      onMonsterSpawnedByObjectId?.(objectID, position);
+    },
+    usedPositions,
+    objectSize: 2,
   });
 
   useEffect(() => {
-    actions['clip_hips_s:SSC']?.play();
-  }, []);
-
-  useInterval(() => {
-    const newX = getPosition(xPositions.min, xPositions.max);
-    const newY = getPosition(yPositions.min, yPositions.max);
-    setObjectPos({ x: newX, y: newY });
-  }, 5000);
-
-  const getPosition = (min: number, max: number): number => {
-    const ran = Math.random() * (max - min) + min;
-    return ran;
-  };
+    if (props.triggerAction) {
+      actions[props.triggerAction]?.play();
+    }
+    if (props.stopAction) {
+      actions[props.stopAction]?.stop();
+    }
+    if (props.stopAllActions && Object.keys(actions).length > 0) {
+      Object.values(actions).forEach((action) => action?.stop());
+    }
+  }, [triggerAction, stopAction, stopAllActions, actions]);
 
   return (
-    <group
-      ref={group}
-      {...props}
-      dispose={null}
-      scale={0.3}
-      position={[objectPos.x, objectPos.y, -15]}
-    >
+    <group ref={modelRef} {...props} dispose={null}>
       <group name="Sketchfab_Scene">
         <group name="Sketchfab_model" rotation={[-Math.PI / 2, 0, 0]}>
           <group name="root">

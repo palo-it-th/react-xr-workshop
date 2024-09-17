@@ -28,10 +28,9 @@ const useQuark = ({
   const { scene } = useThree();
   const [particleObj, setParticleObj] = useState<Object3D | null>(null);
 
-
   const cloneParticle = () => {
     const clonedObj = particleObj?.clone();
-    if(clonedObj === undefined) return;
+    if (clonedObj === undefined) return;
     scene.add(clonedObj as Object3D);
     QuarksUtil.setAutoDestroy(clonedObj, autoDestroy);
     QuarksUtil.addToBatchRenderer(clonedObj, batchRendererRef.current);

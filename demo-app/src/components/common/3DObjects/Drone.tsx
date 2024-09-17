@@ -8,15 +8,16 @@ Title: Pearl Drone - Splatoon Side Order Trailer
 */
 
 import * as THREE from 'three';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useGraph } from '@react-three/fiber';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF, SkeletonUtils } from 'three-stdlib';
-import { MonsterCurrentState, UseSpawnMonsterBase } from '../../../types/common';
+import {
+  MonsterCurrentState,
+  MonsterModelBase,
+  UseSpawnMonsterBase,
+} from '../../../types/common';
 import { useSpawnMonster } from '../../../hooks/useSpawnMonster';
-
-
-
 
 type ActionName = 'Vertical';
 
@@ -53,25 +54,10 @@ type GLTFResult = GLTF & {
   animations: GLTFAction[];
 };
 
-interface DroneBase {
-  objectID: string;
-  triggerAction?: ActionName;
-  stopAction?: ActionName;
-  stopAllActions?: boolean;
-  monsterActionState?: MonsterCurrentState;
-  onMonsterSpawnedByObjectId?: (id: string, position: THREE.Vector3) => void;
-}
+type MergedActionProps = MonsterModelBase<ActionName> & UseSpawnMonsterBase;
+type DroneActionProps = Omit<MergedActionProps, 'monsterRef' | 'isMonsterDead'>;
 
-type MergedDroneActionProps = DroneBase & UseSpawnMonsterBase;
-type DroneActionProps = Omit<
-  MergedDroneActionProps,
-  'monsterRef' | 'isMonsterDead'
->;
-
-const Drone = React.forwardRef<
-  THREE.Group,
-  JSX.IntrinsicElements['group'] & DroneActionProps
->((props, ref) => {
+const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
   const {
     objectID,
     triggerAction,
@@ -85,18 +71,15 @@ const Drone = React.forwardRef<
     usedPositions,
   } = props;
 
-  const monsterRef = useRef<THREE.Group>(null);
+  const modelRef = useRef<THREE.Group>(null);
 
   const { scene, animations } = useGLTF('/3D-models/drone.glb');
   const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene]);
   const { nodes, materials } = useGraph(clone) as GLTFResult;
-  const { actions } = useAnimations(
-    animations,
-    (ref as React.MutableRefObject<THREE.Group>) || monsterRef,
-  );
+  const { actions } = useAnimations(animations, modelRef);
 
   useSpawnMonster({
-    monsterRef: (ref as React.MutableRefObject<THREE.Group>) || monsterRef,
+    monsterRef: modelRef,
     respawnTimer,
     firstSpawnTimer,
     isMonsterDead: monsterActionState === MonsterCurrentState.DEAD,
@@ -121,7 +104,7 @@ const Drone = React.forwardRef<
   }, [triggerAction, stopAction, stopAllActions, actions]);
 
   return (
-    <group ref={ref || monsterRef} {...props} dispose={null}>
+    <group ref={modelRef} {...props} dispose={null}>
       <group name="Sketchfab_Scene">
         <group
           name="Sketchfab_model"
@@ -313,7 +296,7 @@ const Drone = React.forwardRef<
       </group>
     </group>
   );
-});
+};
 
 export default Drone;
 
