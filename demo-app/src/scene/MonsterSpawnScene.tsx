@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AxesHelper, GridHelper, Vector3 } from 'three';
 import { OrbitControls, Text } from '@react-three/drei';
 import { v4 as uuid } from 'uuid';
@@ -10,8 +10,12 @@ import {
   useGlobalPositionStore,
 } from '../state/globalUsedPositionStore';
 import Drone from '../components/common/3DObjects/Drone';
+import BangExplosion from '../components/common/Particles/BangExplosion';
 
-const droneMonsterCount = 6;
+const MONSTER_COUNT = 6;
+const REMOVE_DEAD_MONSTER_TIMER = 500;
+const ADD_NEW_MONSTER_TIMER = 1000;
+const RE_SPAWN_TIMER = 4000;
 
 export default function MonsterSpawnScene() {
   const generatedRef = useRef(false);
@@ -22,12 +26,16 @@ export default function MonsterSpawnScene() {
   );
   const positionStore = useGlobalPositionStore((state) => state);
 
+  const [particlePosition, setParticlePosition] = useState(
+    new Vector3(0, 0, 0),
+  );
+
   useEffect(() => {
     if (generatedRef.current) {
       return;
     }
     generatedRef.current = true;
-    for (let i = 0; i < droneMonsterCount; i++) {
+    for (let i = 0; i < MONSTER_COUNT; i++) {
       const id = uuid();
       droneMonsterStore.addDroneMonster(id, MonsterCurrentState.RUN);
     }
@@ -52,14 +60,14 @@ export default function MonsterSpawnScene() {
     setTimeout(() => {
       droneMonsterStore.removeDroneMonster(id);
       addNewMonster();
-    }, 500);
+    }, REMOVE_DEAD_MONSTER_TIMER);
   };
 
   const addNewMonster = () => {
     setTimeout(() => {
       const id = uuid();
       droneMonsterStore.addDroneMonster(id, MonsterCurrentState.RUN);
-    }, 1000);
+    }, ADD_NEW_MONSTER_TIMER);
   };
 
   const onMonsterSpawned = (id: string, position: Vector3) => {
@@ -69,6 +77,13 @@ export default function MonsterSpawnScene() {
   return (
     <>
       <OrbitControls />
+
+      <BangExplosion
+        enable={true}
+        scale={new Vector3(0.5, 0.5, 0.5)}
+        position={particlePosition}
+      />
+
       <color attach="background" args={['#111']} />
       <ambientLight intensity={2} />
       <primitive object={new AxesHelper(2)} />
@@ -80,15 +95,16 @@ export default function MonsterSpawnScene() {
             <Drone
               key={id}
               objectID={id}
-              respawnTimer={2000}
+              respawnTimer={RE_SPAWN_TIMER}
               triggerAction="Vertical"
               scale={isDead ? 1 : 2}
               initialPosition={new Vector3(0, 0, -100)}
               stopAllActions={isDead}
               monsterActionState={monsters[id].monsterState}
-              onClick={(event: { stopPropagation: () => void; }) => {
+              onClick={(event) => {
                 event.stopPropagation();
                 onClick(id);
+                setParticlePosition(event.point);
               }}
               usedPositions={Object.values(usedPositions)}
               onMonsterSpawnedByObjectId={onMonsterSpawned}

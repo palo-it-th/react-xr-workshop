@@ -78,14 +78,7 @@ export const useSpawnMonster = ({
         clearInterval(respawnIntervalIdRef.current);
       }
     };
-  }, [
-    firstSpawnTimer,
-    respawnTimer,
-    firstSpawned,
-    onMonsterSpawned,
-    isMonsterDead,
-    randomPositionVector3,
-  ]);
+  }, [firstSpawnTimer, respawnTimer, firstSpawned, isMonsterDead]);
 
   useFrame(() => {
     updatePosition();

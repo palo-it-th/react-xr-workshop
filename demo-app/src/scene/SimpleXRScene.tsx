@@ -89,7 +89,6 @@ export default function SimpleXRScene({
         triggerAction="clip_hips_s:SSC"
         scale={0.3}
         onClick={(event) => {
-          setRed(!red);
           setParticlePosition(event.point);
         }}
       />
