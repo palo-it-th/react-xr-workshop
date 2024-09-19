@@ -1,0 +1,9 @@
+.common-btn-2d {
+    bottom: 1em;
+    color: black;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    font-size: 2em;
+    border-radius: 8px;
+    border: none;
+  }

@@ -1,0 +1,30 @@
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.blink-container {
+  background: #181C14;
+  height: 120px;
+  width: 190px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.blink {
+  animation: blink 1s step-start infinite;
+  color: white;
+  font-size: 1.5rem;
+}

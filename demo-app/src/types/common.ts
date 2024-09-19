@@ -39,3 +39,7 @@ export interface MonsterModelBase<TAction = any> {
   monsterActionState?: MonsterCurrentState;
   onMonsterSpawnedByObjectId?: (id: string, position: THREE.Vector3) => void;
 }
+
+export interface GLTFAction extends THREE.AnimationClip {
+  name: string;
+}

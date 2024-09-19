@@ -1,20 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
-import { Object3D, Object3DEventMap, Vector3 } from 'three';
+import { Vector3 } from 'three';
 import { useXR } from '@react-three/xr';
 import { XRSessionMode } from 'iwer/lib/session/XRSession';
 import { PerspectiveCamera, Sphere } from '@react-three/drei';
 
 import Atom from '../components/common/Particles/Atom';
-import SpaceSkyBox from '../components/common/SkyBoxes/SpaceSkyBox';
+// import SpaceSkyBox from '../components/common/SkyBoxes/SpaceSkyBox';
 import SolidSkyBox from '../components/common/SkyBoxes/SolidSkyBox';
-
-// import SqueakGhostWin from '../common/3DObjects/SqueakGhostWin';
-//import MonstersScene from './MonstersScene';
 import BlueFrameTrail from '../components/common/Particles/BlueFrameTrail';
-
 import BangExplosion from '../components/common/Particles/BangExplosion';
 import SqueakGhostWin from '../components/common/3DObjects/SqueakGhostWin';
 import { BoxObject } from '../components/common/3DObjects/BoxObject';
+import CircleSkyBox from '../components/common/SkyBoxes/CircleSkyBox';
 
 interface SimpleXRSceneProps {
   sessionMode: XRSessionMode | null;
@@ -35,7 +32,7 @@ export default function SimpleXRScene({
 
   useEffect(() => {
     const mode = sessionMode;
-    setShouldDisplaySkyBox(mode === null || mode === XRSessionMode.ImmersiveVR);
+    setShouldDisplaySkyBox(mode === XRSessionMode.ImmersiveVR);
   }, [sessionMode]);
 
   useEffect(() => {
@@ -48,7 +45,11 @@ export default function SimpleXRScene({
 
   return (
     <>
-      {shouldDisplaySkyBox ? <SpaceSkyBox /> : <SolidSkyBox />}
+      {shouldDisplaySkyBox ? (
+        <CircleSkyBox textureUrl="/sky-box/galaxy.png" />
+      ) : (
+        <SolidSkyBox />
+      )}
       <Atom
         enable={true}
         scale={new Vector3(0.02, 0.02, 0.02)}
