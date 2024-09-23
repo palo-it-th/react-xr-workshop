@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AxesHelper, GridHelper, Vector3 } from 'three';
 import { OrbitControls, Text } from '@react-three/drei';
 import { v4 as uuid } from 'uuid';
@@ -17,7 +17,11 @@ const REMOVE_DEAD_MONSTER_TIMER = 500;
 const ADD_NEW_MONSTER_TIMER = 1000;
 const RE_SPAWN_TIMER = 4000;
 
-export default function MonsterSpawnScene() {
+export default function MonsterSpawnScene({
+  onHitMonster,
+}: {
+  onHitMonster: (id: string) => void;
+}) {
   const generatedRef = useRef(false);
   const monsters = useDroneMonsterStore((state) => state.monsters);
   const droneMonsterStore = useDroneMonsterStore((state) => state);
@@ -50,6 +54,7 @@ export default function MonsterSpawnScene() {
       return;
     }
     onMonsterDead(id);
+    onHitMonster(id);
   };
 
   const onMonsterDead = (id: string) => {
@@ -74,20 +79,26 @@ export default function MonsterSpawnScene() {
     positionStore.addUsedPosition(PositionScene.DroneSpawnScene, id, position);
   };
 
+  const isFirstRender = useMemo(() => {
+    return particlePosition.x === 0 && particlePosition.y === 0;
+  }, [particlePosition]);
+
   return (
     <>
-      <OrbitControls />
+      {/* <OrbitControls /> */}
 
-      <BangExplosion
-        enable={true}
-        scale={new Vector3(0.5, 0.5, 0.5)}
-        position={particlePosition}
-      />
-
+      {!isFirstRender && (
+        <BangExplosion
+          enable={true}
+          scale={new Vector3(0.5, 0.5, 0.5)}
+          position={particlePosition}
+        />
+      )}
+      {/* 
       <color attach="background" args={['#111']} />
       <ambientLight intensity={2} />
       <primitive object={new AxesHelper(2)} />
-      <primitive object={new GridHelper(40, 40)} />
+      <primitive object={new GridHelper(40, 40)} /> */}
       {droneMonsterStore.monsters &&
         Object.keys(droneMonsterStore.monsters).map((id) => {
           const isDead = monsters[id].monsterState === MonsterCurrentState.DEAD;
@@ -111,7 +122,7 @@ export default function MonsterSpawnScene() {
             />
           );
         })}
-      <Text>Me</Text>
+      {/* <Text position={[0,0,-20]}>Me</Text> */}
     </>
   );
 }

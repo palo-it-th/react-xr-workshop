@@ -80,7 +80,7 @@ export default function MonstersScene() {
               initialPosition={new Vector3(0, 0, -20)}
               stopAllActions={isDead}
               monsterActionState={monsters[id].monsterState}
-              onClick={(event: { stopPropagation: () => void; }) => {
+              onClick={(event: { stopPropagation: () => void }) => {
                 event.stopPropagation();
                 onClick(id);
               }}

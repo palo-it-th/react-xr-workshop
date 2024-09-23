@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { useXRSession } from '../hooks/useXRSession';
-import SimpleXRScene from './SimpleXRScene';
 import StartGameScene from './StartGameScene';
 import { Progress } from '@react-three/uikit-default';
 import { Container, Root } from '@react-three/uikit';
+import InGameScene from './InGameScene';
 
 interface AllGameSceneProps {
   store: any;
+}
+
+enum GameScene {
+  START,
+  IN_GAME,
+  END_GAME,
 }
 
 export default function AllGameScene(props: AllGameSceneProps) {
@@ -20,12 +26,15 @@ export default function AllGameScene(props: AllGameSceneProps) {
     progress,
   } = useXRSession({ store });
 
-  const [isGameStarted, setIsStarted] = useState(false);
+  const [currentGameScene, setStartGameScene] = useState(GameScene.START);
+
+  const isGameStarted = currentGameScene === GameScene.IN_GAME;
+  // const isGameEnded = currentGameScene === GameScene.END_GAME;
 
   return (
     <>
       {isGameStarted && (
-        <SimpleXRScene
+        <InGameScene
           sessionMode={sessionMode}
           onSessionEnd={onXRRequestReset}
         />
@@ -33,17 +42,18 @@ export default function AllGameScene(props: AllGameSceneProps) {
       {!isGameStarted && (
         <StartGameScene
           onGameStart={(mode) => {
-            setIsStarted(true);
+            setStartGameScene(GameScene.IN_GAME);
             onXRRequestChangeMode(mode);
           }}
         />
       )}
-
-      <Root>
-        <Container flexDirection={'column'}>
-          {isLoading && <Progress value={progress} width={200} />}
-        </Container>
-      </Root>
+      {isLoading && (
+        <Root>
+          <Container flexDirection={'column'}>
+            <Progress value={progress} width={200} />
+          </Container>
+        </Root>
+      )}
     </>
   );
 }
