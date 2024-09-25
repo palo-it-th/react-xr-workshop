@@ -1,9 +1,11 @@
 import { create } from 'zustand';
+import { v4 as uuid } from 'uuid';
 
 import { MonsterCurrentState, MonsterStateBase } from '../types/common';
 
 type DroneMonsterState = {
   monsters: { [key: string]: MonsterStateBase };
+  generateDroneMonsters: (count: number) => void;
   addDroneMonster: (id: string, initialState: MonsterCurrentState) => void;
   updateDroneMonster: (id: string, newState: MonsterCurrentState) => void;
   removeDroneMonster: (id: string) => void;
@@ -12,6 +14,18 @@ type DroneMonsterState = {
 
 export const useDroneMonsterStore = create<DroneMonsterState>((set) => ({
   monsters: {},
+  generateDroneMonsters: (count: number) =>
+    set((state) => {
+      const newMonsters: { [key: string]: MonsterStateBase } = {};
+      for (let i = 0; i < count; i++) {
+        const id = uuid();
+        newMonsters[id] = {
+          id,
+          monsterState: MonsterCurrentState.RUN,
+        };
+      }
+      return { monsters: newMonsters };
+    }),
   addDroneMonster: (id, initialState) =>
     set((state) => ({
       monsters: {

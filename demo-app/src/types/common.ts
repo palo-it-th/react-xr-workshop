@@ -43,3 +43,30 @@ export interface MonsterModelBase<TAction = any> {
 export interface GLTFAction extends THREE.AnimationClip {
   name: string;
 }
+
+export enum GameSceneView {
+  HOME,
+  IN_GAME_PRE_START,
+  IN_GAME,
+  END_GAME,
+}
+
+export interface GlobalGameState {
+  gameView: GameSceneView;
+  setGameView: (view: GameSceneView) => void;
+  monsters: { [key: string]: MonsterStateBase };
+  generateMonsters: (count: number) => void;
+  addMonster: (id: string, initialState: MonsterCurrentState) => void;
+  updateMonster: (id: string, newState: MonsterCurrentState) => void;
+  removeMonster: (id: string) => void;
+  resetMonster: () => void;
+  points: number;
+  addPoints: (points: number) => void;
+  resetPoints: () => void;
+  particlePosition: Vector3;
+  updateParticlePosition: (position: Vector3) => void;
+  timeCountDown: number;
+  setTimeCountDown: (time: number) => void;
+  resetGame: () => void;
+  restartGame: () => void;
+}

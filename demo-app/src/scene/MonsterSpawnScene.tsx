@@ -39,11 +39,7 @@ export default function MonsterSpawnScene({
       return;
     }
     generatedRef.current = true;
-    for (let i = 0; i < MONSTER_COUNT; i++) {
-      const id = uuid();
-      droneMonsterStore.addDroneMonster(id, MonsterCurrentState.RUN);
-    }
-
+    droneMonsterStore.generateDroneMonsters(MONSTER_COUNT);
     return () => {
       droneMonsterStore.reset();
     };

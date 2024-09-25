@@ -9,10 +9,16 @@ import { Card } from '@react-three/uikit-default';
 
 import SolidSkyBox from '../components/common/SkyBoxes/SolidSkyBox';
 import CircleSkyBox from '../components/common/SkyBoxes/CircleSkyBox';
-import MonsterSpawnScene from './MonsterSpawnScene';
+import SpawnMonsterView from './SpawnMonsterView';
 import XRUIWrapper from '../components/common/UI/XRUIWrapper';
+import { useGlobalGameStore } from '../state/globalGameStore';
+import { GameSceneView, MonsterCurrentState } from '../types/common';
+import PreStartGameView from './PreStartGameView';
+import EndGameView from './EndGameView';
 
-interface InGameSceneProps {
+const MONSTER_HIT_POINTS = 50;
+
+interface InGameViewProps {
   sessionMode: XRSessionMode | null;
   onSessionEnd: () => void;
 }
@@ -20,16 +26,23 @@ interface InGameSceneProps {
 export default function InGameScene({
   sessionMode,
   onSessionEnd,
-}: InGameSceneProps) {
+}: InGameViewProps) {
   const session = useXR((state) => state.session);
-
-  const [shouldDisplaySkyBox, setShouldDisplaySkyBox] = useState(true);
-  const [shouldDisplayMonsters, setShouldDisplayMonsters] = useState(false);
-  const [gamePoints, setGamePoints] = useState(0);
+  const gameStore = useGlobalGameStore((state) => state);
+  const isGamePreStart = gameStore.gameView === GameSceneView.IN_GAME_PRE_START;
+  const isGameStarted = gameStore.gameView === GameSceneView.IN_GAME;
+  const isGameEnded = gameStore.gameView === GameSceneView.END_GAME;
 
   const scoreBoardRef = useRef<THREE.Mesh>(null);
   const timeBoardRef = useRef<THREE.Mesh>(null);
-  const [countdown, setCountdown] = useState(60);
+  const cameraRef = useRef<THREE.PerspectiveCamera>(null);
+
+  const [shouldDisplaySkyBox, setShouldDisplaySkyBox] = useState(true);
+  const [isPreLoaded, setIsPreLoaded] = useState(false);
+
+  const shouldDisplayPreStart =
+    isGamePreStart && !isGameStarted && !isGameEnded;
+  const shouldDisplayStarted = isPreLoaded && !isGamePreStart && isGameStarted;
 
   useEffect(() => {
     const mode = sessionMode;
@@ -46,8 +59,8 @@ export default function InGameScene({
 
   useEffect(() => {
     setTimeout(() => {
-      setShouldDisplayMonsters(true);
-    }, 5000);
+      setIsPreLoaded(true);
+    }, 3000);
   }, []);
 
   useFrame(() => {
@@ -55,19 +68,19 @@ export default function InGameScene({
   });
 
   useEffect(() => {
-    if (!shouldDisplayMonsters) return;
+    if (!isGameStarted) return;
     const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev === 0) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
+      const time = gameStore.timeCountDown;
+      if (time === 0) {
+        gameStore.setTimeCountDown(0);
+        gameStore.setGameView(GameSceneView.END_GAME);
+        clearInterval(timer);
+        return;
+      }
+      gameStore.setTimeCountDown(time - 1);
     }, 1000);
-
     return () => clearInterval(timer);
-  }, [shouldDisplayMonsters]);
+  }, [isGameStarted, gameStore.timeCountDown]);
 
   const adjustBoardPosition = () => {
     if (scoreBoardRef.current) {
@@ -78,10 +91,18 @@ export default function InGameScene({
     }
   };
 
-  const POINTS_PER_HIT = 10;
-
   const onHitMonster = (id: string) => {
-    setGamePoints((prev) => prev + POINTS_PER_HIT);
+    if (
+      gameStore.monsters[id].monsterState === MonsterCurrentState.DEAD ||
+      isGameEnded
+    ) {
+      return;
+    }
+    gameStore.addPoints(MONSTER_HIT_POINTS);
+  };
+
+  const onQuit = () => {
+    window.location.reload();
   };
 
   return (
@@ -93,14 +114,18 @@ export default function InGameScene({
       )}
       <ambientLight intensity={2} />
       <PerspectiveCamera
+        ref={cameraRef}
         makeDefault
         position={[0, 0, 0]}
         rotation={[0, 0, 0]}
       />
 
-      {shouldDisplayMonsters && (
+      {shouldDisplayPreStart && <PreStartGameView />}
+
+      {shouldDisplayStarted && (
         <>
-          <MonsterSpawnScene onHitMonster={onHitMonster} />
+          <SpawnMonsterView onHitMonster={onHitMonster} />
+
           <XRUIWrapper ref={timeBoardRef} position={[-5, -0.8, -5]}>
             <Root flexDirection="row">
               <Card color={'red'} height={60} width={200} receiveShadow>
@@ -110,8 +135,8 @@ export default function InGameScene({
                   padding={6}
                   justifyContent={'center'}
                 >
-                  <Text fontSize={28}>Time: </Text>
-                  <Text fontSize={40}>{`${countdown}`}</Text>
+                  <Text fontSize={28}>TIME: </Text>
+                  <Text fontSize={40}>{`${gameStore.timeCountDown}`}</Text>
                 </Container>
               </Card>
             </Root>
@@ -125,13 +150,22 @@ export default function InGameScene({
                   padding={6}
                   justifyContent={'center'}
                 >
-                  <Text fontSize={24}>Score: </Text>
-                  <Text fontSize={32}>{`${gamePoints}`}</Text>
+                  <Text fontSize={24}>SCORE: </Text>
+                  <Text fontSize={32}>{`${gameStore.points}`}</Text>
                 </Container>
               </Card>
             </Root>
           </XRUIWrapper>
         </>
+      )}
+
+      {isGameEnded && (
+        <EndGameView
+          onQuit={onQuit}
+          onRestart={() => {
+            gameStore.restartGame();
+          }}
+        />
       )}
     </>
   );

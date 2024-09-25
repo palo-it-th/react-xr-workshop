@@ -1,5 +1,5 @@
 import { Html, CameraControls } from '@react-three/drei';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Vector3 } from 'three';
 import { XRSessionMode } from 'iwer/lib/session/XRSession';
 
@@ -15,7 +15,7 @@ interface StartGameSceneProps {
   onGameStart: (mode: XRSessionMode) => void;
 }
 
-export default function StartGameScene({ onGameStart }: StartGameSceneProps) {
+export default function HomeView({ onGameStart }: StartGameSceneProps) {
   const cameraRef = useRef<CameraControls>(null);
   const isStartedRef = useRef<boolean>(false);
   const modeRef = useRef<XRSessionMode | null>(null);
@@ -41,6 +41,12 @@ export default function StartGameScene({ onGameStart }: StartGameSceneProps) {
       onGameStart && onGameStart(modeRef.current!);
     }, 2500);
   };
+
+  useEffect(() => {
+    if (cameraRef.current) {
+      cameraRef.current?.reset(true);
+    }
+  }, []);
 
   return (
     <>

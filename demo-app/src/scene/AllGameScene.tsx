@@ -1,18 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
+
 import { useXRSession } from '../hooks/useXRSession';
-import StartGameScene from './StartGameScene';
-import { Progress } from '@react-three/uikit-default';
-import { Container, Root } from '@react-three/uikit';
-import InGameScene from './InGameScene';
+import HomeView from '../views/HomeView';
+import { GameSceneView } from '../types/common';
+import { useGlobalGameStore } from '../state/globalGameStore';
+import InGameView from '../views/InGameView';
+import LoadingView from '../views/LoadingView';
 
 interface AllGameSceneProps {
   store: any;
-}
-
-enum GameScene {
-  START,
-  IN_GAME,
-  END_GAME,
 }
 
 export default function AllGameScene(props: AllGameSceneProps) {
@@ -26,34 +22,30 @@ export default function AllGameScene(props: AllGameSceneProps) {
     progress,
   } = useXRSession({ store });
 
-  const [currentGameScene, setStartGameScene] = useState(GameScene.START);
+  const gameStore = useGlobalGameStore((state) => state);
 
-  const isGameStarted = currentGameScene === GameScene.IN_GAME;
-  // const isGameEnded = currentGameScene === GameScene.END_GAME;
+  const isInGameView =
+    gameStore.gameView === GameSceneView.IN_GAME ||
+    gameStore.gameView === GameSceneView.END_GAME ||
+    gameStore.gameView === GameSceneView.IN_GAME_PRE_START;
+  const isHomeView = gameStore.gameView === GameSceneView.HOME;
 
   return (
     <>
-      {isGameStarted && (
-        <InGameScene
-          sessionMode={sessionMode}
-          onSessionEnd={onXRRequestReset}
-        />
-      )}
-      {!isGameStarted && (
-        <StartGameScene
+      {isHomeView && (
+        <HomeView
           onGameStart={(mode) => {
-            setStartGameScene(GameScene.IN_GAME);
+            gameStore.setGameView(GameSceneView.IN_GAME_PRE_START);
             onXRRequestChangeMode(mode);
           }}
         />
       )}
-      {isLoading && (
-        <Root>
-          <Container flexDirection={'column'}>
-            <Progress value={progress} width={200} />
-          </Container>
-        </Root>
+
+      {isInGameView && (
+        <InGameView sessionMode={sessionMode} onSessionEnd={onXRRequestReset} />
       )}
+
+      {isLoading && <LoadingView progress={progress} />}
     </>
   );
 }
