@@ -1,8 +1,7 @@
-import { useThree } from '@react-three/fiber';
-import { CubeTextureLoader, TextureLoader } from 'three'; // Import THREE from 'three'
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
+import SquareSkyBox from './SquareSkyBox';
 
-const textSources = [
+const SPACE_SKY_BOX_TEXTURES = [
   '/space-sky-box-textures/1.jpg',
   '/space-sky-box-textures/2.jpg',
   '/space-sky-box-textures/3.jpg',
@@ -13,18 +12,7 @@ const textSources = [
 
 // Notes : Use memo to avoid reloading texture if it is rerendered.
 const SpaceSkyBox = memo(() => {
-  const { scene } = useThree();
-
-  useEffect(() => {
-    const loader = new CubeTextureLoader();
-    const textures = loader.load(textSources);
-    scene.background = textures;
-    return () => {
-      textures.dispose();
-    };
-  }, []);
-
-  return null;
+  return <SquareSkyBox textureUrls={SPACE_SKY_BOX_TEXTURES} />;
 });
 
 export default SpaceSkyBox;
