@@ -15,6 +15,8 @@ import { useGlobalGameStore } from '../state/globalGameStore';
 import { GameSceneView, MonsterCurrentState } from '../types/common';
 import PreStartGameView from './PreStartGameView';
 import EndGameView from './EndGameView';
+import { useXRSession } from '../hooks/useXRSession';
+import { set } from 'lodash';
 
 const MONSTER_HIT_POINTS = 50;
 
@@ -102,6 +104,8 @@ export default function InGameScene({
   };
 
   const onQuit = () => {
+    session?.end();
+    // TODO: This is a hacky way to reload the page. We should find a better way to do this.
     window.location.reload();
   };
 
