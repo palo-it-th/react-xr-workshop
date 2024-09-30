@@ -6,6 +6,7 @@ import { GameSceneView } from '../types/common';
 import { useGlobalGameStore } from '../state/globalGameStore';
 import InGameView from '../views/InGameView';
 import LoadingView from '../views/LoadingView';
+import { Physics } from '@react-three/rapier';
 
 interface AllGameSceneProps {
   store: any;

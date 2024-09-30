@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 
 const X_RANGE = { min: -15, max: 15 };
-const Y_RANGE = { min: 0, max: 10 };
-const Z_RANGE = { min: -10, max: -10 };
+const Y_RANGE = { min: 0, max: 5 };
+const Z_RANGE = { min: -7, max: -7 };
 
 interface RandomScope {
   x: { min: number; max: number };

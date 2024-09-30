@@ -6,6 +6,7 @@
     "@babel/preset-env": "^7.25.3",
     "@react-three/drei": "^9.109.2",
     "@react-three/fiber": "^8.16.8",
+    "@react-three/rapier": "^1.4.0",
     "@react-three/uikit": "^0.5.1",
     "@react-three/uikit-apfel": "^0.5.1",
     "@react-three/uikit-default": "^0.5.1",

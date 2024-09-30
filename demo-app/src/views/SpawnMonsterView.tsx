@@ -14,7 +14,7 @@ import BangExplosion from '../components/common/Particles/BangExplosion';
 const MONSTER_COUNT = 6;
 const REMOVE_DEAD_MONSTER_TIMER = 500;
 const ADD_NEW_MONSTER_TIMER = 1000;
-const RE_SPAWN_TIMER = 4000;
+const RE_SPAWN_TIMER = 5000;
 
 interface MonsterSpawnViewProps {
   monsterCount?: number;
@@ -108,7 +108,7 @@ const MonsterSpawnView = (props: MonsterSpawnViewProps) => {
               objectID={id}
               respawnTimer={reSpawnTimer}
               triggerAction="Vertical"
-              scale={isDead ? 1 : 2}
+              scale={isDead ? 1 : 3}
               initialPosition={new Vector3(0, 0, -100)}
               stopAllActions={isDead}
               monsterActionState={monsters[id].monsterState}

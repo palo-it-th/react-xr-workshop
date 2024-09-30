@@ -21,7 +21,7 @@ const CircleSkyBox = memo(
     const { scene } = useThree();
 
     const sphereGeometry = useMemo(() => DEFAULT_SPHERE_GEOMETRY, []);
-    
+
     const skyMaterial = useMemo(
       () => createSkyMaterial(textureUrl),
       [textureUrl],

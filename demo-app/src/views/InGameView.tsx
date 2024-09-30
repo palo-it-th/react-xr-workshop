@@ -86,10 +86,10 @@ export default function InGameScene({
 
   const adjustBoardPosition = () => {
     if (scoreBoardRef.current) {
-      scoreBoardRef.current.lookAt(3, 0, 0);
+      scoreBoardRef.current.lookAt(1, 0, 0);
     }
     if (timeBoardRef.current) {
-      timeBoardRef.current.lookAt(-3, 0, 0);
+      timeBoardRef.current.lookAt(-1, 0, 0);
     }
   };
 
@@ -130,7 +130,7 @@ export default function InGameScene({
         <>
           <SpawnMonsterView onHitMonster={onHitMonster} />
 
-          <XRUIWrapper ref={timeBoardRef} position={[-5, -0.8, -5]}>
+          <XRUIWrapper ref={timeBoardRef} position={[-2, -0.8, -5]}>
             <Root flexDirection="row">
               <Card color={'red'} height={60} width={200} receiveShadow>
                 <Container
@@ -145,7 +145,7 @@ export default function InGameScene({
               </Card>
             </Root>
           </XRUIWrapper>
-          <XRUIWrapper ref={scoreBoardRef} position={[5, -0.8, -5]}>
+          <XRUIWrapper ref={scoreBoardRef} position={[2, -0.8, -5]}>
             <Root flexDirection="row">
               <Card height={60} width={200} opacity={0.8} receiveShadow>
                 <Container

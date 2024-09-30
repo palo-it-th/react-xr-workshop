@@ -10,7 +10,7 @@ export default function MachineScreen() {
       rotation={[1.3, 0, 0]}
       scale={0.16}
     >
-      <div className='blink-container'>
+      <div className="blink-container">
         <h1 className="blink">START GAME</h1>
       </div>
     </Html>

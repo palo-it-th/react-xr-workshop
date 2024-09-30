@@ -9,7 +9,7 @@ import {
   MonsterStateBase,
 } from '../types/common';
 
-const GAME_TIME = 15;
+const GAME_TIME = 30;
 
 export const useGlobalGameStore = create<GlobalGameState>((set) => ({
   // Manage game view state

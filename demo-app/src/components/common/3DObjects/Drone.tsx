@@ -10,7 +10,7 @@ Title: Pearl Drone - Splatoon Side Order Trailer
 import * as THREE from 'three';
 import React, { useEffect, useRef } from 'react';
 import { useGraph } from '@react-three/fiber';
-import { useGLTF, useAnimations } from '@react-three/drei';
+import { useGLTF, useAnimations, Box } from '@react-three/drei';
 import { GLTF, SkeletonUtils } from 'three-stdlib';
 import {
   MonsterCurrentState,
@@ -18,6 +18,7 @@ import {
   UseSpawnMonsterBase,
 } from '../../../types/common';
 import { useSpawnMonster } from '../../../hooks/useSpawnMonster';
+import { RigidBody } from '@react-three/rapier';
 
 type ActionName = 'Vertical';
 
