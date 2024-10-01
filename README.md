@@ -10,5 +10,6 @@
 ```
 
 ### Example resources
-- 3D Model : https://sketchfab.com/feed
-- VFX : https://pmndrs.github.io/uikit/docs/
+- 3D Model and SkyBox : https://sketchfab.com/feed
+- VFX : https://quarks.art/
+- UIKit : https://pmndrs.github.io/uikit/docs/
