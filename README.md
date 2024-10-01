@@ -4,7 +4,7 @@
 - Node version >= 20.0.0 : https://nodejs.org/en
 - gltfjsx : https://github.com/pmndrs/gltfjsx
 
-### Run script.sh to check required tools installed on your machine
+### Run script to check required tools installed on your machine
 ```
 ./script.sh
 ```
