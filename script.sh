@@ -62,7 +62,7 @@ verify_tool() {
 
 echo "Tools verification..."
 
-verify_tool "node" "20.0" NODE_VERIFIED NODE_VERIFIED_MESSAGE NODE_ICON
+verify_tool "node" "20.10.0" NODE_VERIFIED NODE_VERIFIED_MESSAGE NODE_ICON
 verify_tool "gltfjsx" "" GLTFJSX_VERIFIED GLTFJSX_VERIFIED_MESSAGE GLTFJSX_ICON
 
 echo "Tools verification completed"

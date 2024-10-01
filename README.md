@@ -1,7 +1,7 @@
 ## REACT-XR-WORKSHOP
 
 ### Required tools
-- Node version >= 20.0.0 : https://nodejs.org/en
+- Node version >= 20.10.0 : https://nodejs.org/en
 - gltfjsx : https://github.com/pmndrs/gltfjsx
 
 ### Run script to check required tools installed on your machine
