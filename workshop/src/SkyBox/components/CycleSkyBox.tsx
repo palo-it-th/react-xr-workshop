@@ -9,6 +9,7 @@ interface CircleSkyBoxProps {
   sphereGeometry?: THREE.SphereGeometry;
 }
 
+// Create a sky material with the texture
 const createSkyMaterial = (textureUrl: string): THREE.MeshBasicMaterial => {
   return new THREE.MeshBasicMaterial({
     map: new THREE.TextureLoader().load(textureUrl),
@@ -20,13 +21,16 @@ const CircleSkyBox = memo(
   ({ textureUrl }: CircleSkyBoxProps) => {
     const { scene } = useThree();
 
+    // Create a sphere geometry
     const sphereGeometry = useMemo(() => DEFAULT_SPHERE_GEOMETRY, []);
 
+    // Create a sky material and put the texture on it
     const skyMaterial = useMemo(
       () => createSkyMaterial(textureUrl),
       [textureUrl],
     );
 
+    // Add the sky to the scene
     useEffect(() => {
       const sky = new THREE.Mesh(sphereGeometry, skyMaterial);
       sky.material.side = THREE.BackSide;
@@ -39,7 +43,6 @@ const CircleSkyBox = memo(
 
     return <></>;
   },
-  (prevProps, nextProps) => prevProps.textureUrl === nextProps.textureUrl,
 );
 
 export default CircleSkyBox;

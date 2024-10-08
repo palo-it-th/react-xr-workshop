@@ -9,6 +9,7 @@ interface SolidSkyBoxProps {
 const SolidSkyBox = memo(({ color = new Color(0, 0, 0) }: SolidSkyBoxProps) => {
   const { scene } = useThree();
 
+  // Set the background color of the scene
   scene.background = color;
 
   useEffect(() => {
