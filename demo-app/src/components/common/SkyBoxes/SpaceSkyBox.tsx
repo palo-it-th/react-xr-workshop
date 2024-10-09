@@ -11,8 +11,8 @@ const SPACE_SKY_BOX_TEXTURES = [
 ];
 
 // Notes : Use memo to avoid reloading texture if it is rerendered.
-const SpaceSkyBox = memo(() => {
+const SpaceSkyBox = () => {
   return <SquareSkyBox textureUrls={SPACE_SKY_BOX_TEXTURES} />;
-});
+};
 
 export default SpaceSkyBox;

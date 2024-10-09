@@ -16,8 +16,7 @@ const createSkyMaterial = (textureUrl: string): THREE.MeshBasicMaterial => {
   });
 };
 
-const CircleSkyBox = memo(
-  ({ textureUrl }: CircleSkyBoxProps) => {
+const CircleSkyBox = ({ textureUrl }: CircleSkyBoxProps) => {
     const { scene } = useThree();
 
     const sphereGeometry = useMemo(() => DEFAULT_SPHERE_GEOMETRY, []);
@@ -38,8 +37,6 @@ const CircleSkyBox = memo(
     }, [sphereGeometry, skyMaterial]);
 
     return <></>;
-  },
-  (prevProps, nextProps) => prevProps.textureUrl === nextProps.textureUrl,
-);
+};
 
 export default CircleSkyBox;

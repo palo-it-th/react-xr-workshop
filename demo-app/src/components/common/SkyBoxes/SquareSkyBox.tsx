@@ -11,7 +11,7 @@ interface SquareSkyBoxProps {
   textureUrls: string[];
 }
 
-const SquareSkyBox = memo(({ textureUrls }: SquareSkyBoxProps) => {
+const SquareSkyBox = ({ textureUrls }: SquareSkyBoxProps) => {
     const { scene } = useThree();
 
     useEffect(() => {
@@ -24,6 +24,6 @@ const SquareSkyBox = memo(({ textureUrls }: SquareSkyBoxProps) => {
     }, []);
 
     return <></>;
-});
+};
 
 export default SquareSkyBox;
