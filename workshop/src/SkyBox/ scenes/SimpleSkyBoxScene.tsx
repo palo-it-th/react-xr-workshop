@@ -1,10 +1,10 @@
 import React from 'react';
 import { Color as THREEColor } from 'three';
 import { CameraControls, Plane } from '@react-three/drei';
-import CycleSkyBox from '../components/CycleSkyBox';
-import SolidSkyBox from '../components/SolidSkyBox';
-import CubeSkyBox from '../components/CubeSkyBox';
-import PlaneSkyBox from '../components/PlaneSkyBox';
+import CycleSky from '../components/CycleSkyBox';
+import SolidSky from '../components/SolidSkyBox';
+import CubeSky from '../components/CubeSkyBox';
+import PlaneSky from '../components/PlaneSkyBox';
 
 const CUBE_TEXTURE_URLS = [
   '/space-sky-box-textures/1.jpg',
@@ -19,10 +19,10 @@ export default function SimpleCycleSkyBoxScene() {
   return (
     <>
       <CameraControls />
-      {<CycleSkyBox textureUrl="/sky-box/galaxy-sky.png" />}
-      {/*<CubeSkyBox textureUrls={CUBE_TEXTURE_URLS} />*/}
-      {/*<SolidSkyBox color={new THREEColor('#2fc')} />*/}
-      {/*<PlaneSkyBox textureUrl={'/space-sky-box-textures/1.jpg'} />*/}
+      {/*<CycleSky textureUrl="/sky-box/galaxy-sky.png" />*/}
+      {/*<CubeSky textureUrls={CUBE_TEXTURE_URLS} />*/}
+      {<SolidSky color={new THREEColor('#2fc')} />}
+      {/*<PlaneSky textureUrl={'/space-sky-box-textures/1.jpg'} />*/}
     </>
   );
 }

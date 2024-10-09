@@ -5,11 +5,11 @@ import { useThree } from '@react-three/fiber';
 import { useEffect } from 'react';
 import * as THREE from 'three';
 
-interface CubeSkyBoxProps {
+interface CubeSkyProps {
   textureUrls: string[];
 }
 
-const CubeSkyBox = ({ textureUrls }: CubeSkyBoxProps) => {
+const CubeSky = ({ textureUrls }: CubeSkyProps) => {
     const { scene } = useThree();
 
     useEffect(() => {
@@ -26,4 +26,4 @@ const CubeSkyBox = ({ textureUrls }: CubeSkyBoxProps) => {
     return <></>;
 };
 
-export default CubeSkyBox;
+export default CubeSky;

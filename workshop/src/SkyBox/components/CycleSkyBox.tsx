@@ -4,7 +4,7 @@ import * as THREE from 'three';
 
 const DEFAULT_SPHERE_GEOMETRY = new THREE.SphereGeometry(200, 60, 40);
 
-interface CircleSkyBoxProps {
+interface CircleSkyProps {
   textureUrl: string;
   sphereGeometry?: THREE.SphereGeometry;
 }
@@ -17,7 +17,7 @@ const createSkyMaterial = (textureUrl: string): THREE.MeshBasicMaterial => {
   });
 };
 
-const CircleSkyBox = ({ textureUrl }: CircleSkyBoxProps) => {
+const CircleSky = ({ textureUrl }: CircleSkyProps) => {
     const { scene } = useThree();
 
     // Create a sphere geometry
@@ -43,4 +43,4 @@ const CircleSkyBox = ({ textureUrl }: CircleSkyBoxProps) => {
     return <></>;
 };
 
-export default CircleSkyBox;
+export default CircleSky;

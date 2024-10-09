@@ -5,11 +5,11 @@ import { useThree } from '@react-three/fiber';
 import { useEffect } from 'react';
 import * as THREE from 'three';
 
-interface PlaneSkyBoxProps {
+interface PlaneSkyProps {
   textureUrl: string;
 }
 
-const PlaneSkyBox = ({ textureUrl }: PlaneSkyBoxProps) => {
+const PlaneSky = ({ textureUrl }: PlaneSkyProps) => {
     const { scene } = useThree();
 
     useEffect(() => {
@@ -26,4 +26,4 @@ const PlaneSkyBox = ({ textureUrl }: PlaneSkyBoxProps) => {
     return <></>;
 };
 
-export default PlaneSkyBox;
+export default PlaneSky;

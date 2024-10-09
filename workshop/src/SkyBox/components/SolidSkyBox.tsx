@@ -2,11 +2,11 @@ import { useThree } from '@react-three/fiber';
 import { memo, useEffect } from 'react';
 import { Color } from 'three';
 
-interface SolidSkyBoxProps {
+interface SolidSkyProps {
   color?: Color;
 }
 
-const SolidSkyBox = ({ color = new Color(0, 0, 0) }: SolidSkyBoxProps) => {
+const SolidSky = ({ color = new Color(0, 0, 0) }: SolidSkyProps) => {
   const { scene } = useThree();
 
   // Set the background color of the scene
@@ -21,4 +21,4 @@ const SolidSkyBox = ({ color = new Color(0, 0, 0) }: SolidSkyBoxProps) => {
   return null;
 };
 
-export default SolidSkyBox;
+export default SolidSky;
