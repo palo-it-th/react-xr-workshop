@@ -20,8 +20,8 @@ function App() {
 
         {/* <Simple3DScene /> */}
         {/* <Simple3DModelAnimationScene /> */}
-        {/* <SimpleVFXScene /> */}
-        { <SimpleCycleSkyBoxScene /> }
+        { <SimpleVFXScene /> }
+        {/* <SimpleCycleSkyBoxScene /> */}
         {/* <SimpleUIScene /> */}
       </Canvas>
     </>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame, useThree } from 'react-three-fiber';
 import { Mesh, Vector3 } from 'three';
 import { BatchedRenderer, QuarksLoader } from 'three.quarks';
@@ -8,7 +8,8 @@ interface AtomProps {
 }
 
 export default function Atom({ position }: AtomProps) {
-  const [batchRenderer] = useState(new BatchedRenderer());
+  // Create a batch renderer
+  const batchRenderer = useMemo(()=>{return new BatchedRenderer()}, [])
 
   useFrame((_, delta) => {
     // Keep the batch renderer updated every frame

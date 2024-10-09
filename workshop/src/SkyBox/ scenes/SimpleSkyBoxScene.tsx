@@ -1,10 +1,10 @@
 import React from 'react';
 import { Color as THREEColor } from 'three';
 import { CameraControls, Plane } from '@react-three/drei';
-import CycleSky from '../components/CycleSkyBox';
-import SolidSky from '../components/SolidSkyBox';
-import CubeSky from '../components/CubeSkyBox';
-import PlaneSky from '../components/PlaneSkyBox';
+import CycleSky from '../components/SphereSky';
+import SolidSky from '../components/SolidSky';
+import CubeSky from '../components/CubeSky';
+import PlaneSky from '../components/PlaneSky';
 
 const CUBE_TEXTURE_URLS = [
   '/space-sky-box-textures/1.jpg',
