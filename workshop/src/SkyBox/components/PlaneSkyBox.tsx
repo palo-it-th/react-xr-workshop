@@ -2,14 +2,14 @@
 
 import React from 'react';
 import { useThree } from '@react-three/fiber';
-import { memo, useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import * as THREE from 'three';
 
 interface PlaneSkyBoxProps {
   textureUrl: string;
 }
 
-const PlaneSkyBox = memo(({ textureUrl }: PlaneSkyBoxProps) => {
+const PlaneSkyBox = ({ textureUrl }: PlaneSkyBoxProps) => {
     const { scene } = useThree();
 
     useEffect(() => {
@@ -24,6 +24,6 @@ const PlaneSkyBox = memo(({ textureUrl }: PlaneSkyBoxProps) => {
     }, []);
 
     return <></>;
-});
+};
 
 export default PlaneSkyBox;

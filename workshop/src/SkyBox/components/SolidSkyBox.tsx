@@ -6,7 +6,7 @@ interface SolidSkyBoxProps {
   color?: Color;
 }
 
-const SolidSkyBox = memo(({ color = new Color(0, 0, 0) }: SolidSkyBoxProps) => {
+const SolidSkyBox = ({ color = new Color(0, 0, 0) }: SolidSkyBoxProps) => {
   const { scene } = useThree();
 
   // Set the background color of the scene
@@ -19,6 +19,6 @@ const SolidSkyBox = memo(({ color = new Color(0, 0, 0) }: SolidSkyBoxProps) => {
   }, []);
 
   return null;
-});
+};
 
 export default SolidSkyBox;

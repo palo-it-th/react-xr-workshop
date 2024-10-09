@@ -1,5 +1,5 @@
 import { useThree } from '@react-three/fiber';
-import React, { memo, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import * as THREE from 'three';
 
 const DEFAULT_SPHERE_GEOMETRY = new THREE.SphereGeometry(200, 60, 40);
@@ -17,8 +17,7 @@ const createSkyMaterial = (textureUrl: string): THREE.MeshBasicMaterial => {
   });
 };
 
-const CircleSkyBox = memo(
-  ({ textureUrl }: CircleSkyBoxProps) => {
+const CircleSkyBox = ({ textureUrl }: CircleSkyBoxProps) => {
     const { scene } = useThree();
 
     // Create a sphere geometry
@@ -42,7 +41,6 @@ const CircleSkyBox = memo(
     }, [sphereGeometry, skyMaterial]);
 
     return <></>;
-  },
-);
+};
 
 export default CircleSkyBox;

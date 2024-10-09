@@ -2,14 +2,14 @@
 
 import React from 'react';
 import { useThree } from '@react-three/fiber';
-import { memo, useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import * as THREE from 'three';
 
 interface CubeSkyBoxProps {
   textureUrls: string[];
 }
 
-const CubeSkyBox = memo(({ textureUrls }: CubeSkyBoxProps) => {
+const CubeSkyBox = ({ textureUrls }: CubeSkyBoxProps) => {
     const { scene } = useThree();
 
     useEffect(() => {
@@ -24,6 +24,6 @@ const CubeSkyBox = memo(({ textureUrls }: CubeSkyBoxProps) => {
     }, []);
 
     return <></>;
-});
+};
 
 export default CubeSkyBox;
