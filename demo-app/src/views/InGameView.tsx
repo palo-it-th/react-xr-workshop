@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useXR } from '@react-three/xr';
 import { XRSessionMode } from 'iwer/lib/session/XRSession';
 import { PerspectiveCamera } from '@react-three/drei';
@@ -15,8 +15,7 @@ import { useGlobalGameStore } from '../state/globalGameStore';
 import { GameSceneView, MonsterCurrentState } from '../types/common';
 import PreStartGameView from './PreStartGameView';
 import EndGameView from './EndGameView';
-import { useXRSession } from '../hooks/useXRSession';
-import { set } from 'lodash';
+import { useSound } from '../hooks/useSound';
 
 const MONSTER_HIT_POINTS = 50;
 
@@ -45,6 +44,69 @@ export default function InGameScene({
   const shouldDisplayPreStart =
     isGamePreStart && !isGameStarted && !isGameEnded;
   const shouldDisplayStarted = isPreLoaded && !isGamePreStart && isGameStarted;
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const audioBuffersRef = useRef<{ [key: string]: AudioBuffer }>({});
+  const [soundsReady, setSoundsReady] = useState<{ [key: string]: boolean }>({});
+  const [hasPlayedStartSound, setHasPlayedStartSound] = useState(false);
+
+  useEffect(() => {
+    const soundUrls = {
+      hit: '/sounds/okay-meme.mp3',
+      start: '/sounds/start.mp3',
+      gameOver: '/sounds/game-over.mp3',
+    };
+
+    let isSubscribed = true;
+
+    const initAudio = async () => {
+      try {
+        if (!audioContextRef.current) {
+          audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+        }
+
+        for (const [key, url] of Object.entries(soundUrls)) {
+          try {
+            const response = await fetch(url);
+            const arrayBuffer = await response.arrayBuffer();
+            const audioBuffer = await audioContextRef.current.decodeAudioData(arrayBuffer);
+            if (isSubscribed) {
+              audioBuffersRef.current[key] = audioBuffer;
+              setSoundsReady(prev => ({ ...prev, [key]: true }));
+            }
+          } catch (error) {
+            console.error(`Error loading sound ${key}:`, error);
+          }
+        }
+      } catch (error) {
+        console.error('Error initializing audio context:', error);
+      }
+    };
+
+    initAudio();
+
+    return () => {
+      isSubscribed = false;
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+    };
+  }, []);
+
+  const playSound = useCallback((soundKey: string) => {
+    if (!audioContextRef.current || !audioBuffersRef.current[soundKey]) {
+      console.warn(`Sound ${soundKey} not ready`);
+      return;
+    }
+
+    try {
+      const source = audioContextRef.current.createBufferSource();
+      source.buffer = audioBuffersRef.current[soundKey];
+      source.connect(audioContextRef.current.destination);
+      source.start(0);
+    } catch (error) {
+      console.error(`Error playing sound ${soundKey}:`, error);
+    }
+  }, []);
 
   useEffect(() => {
     const mode = sessionMode;
@@ -71,6 +133,11 @@ export default function InGameScene({
 
   useEffect(() => {
     if (!isGameStarted) return;
+    if (isGameStarted && !hasPlayedStartSound) {
+      playSound('start');
+      setHasPlayedStartSound(true);
+    }
+
     const timer = setInterval(() => {
       const time = gameStore.timeCountDown;
       if (time === 0) {
@@ -83,6 +150,14 @@ export default function InGameScene({
     }, 1000);
     return () => clearInterval(timer);
   }, [isGameStarted, gameStore.timeCountDown]);
+
+  useEffect(() => {
+    if (isGameEnded) {
+      // Perform your action here when isGameStarted is true
+      playSound('gameOver');
+      setHasPlayedStartSound(false);
+    }
+  }, [isGameEnded]);
 
   const adjustBoardPosition = () => {
     if (scoreBoardRef.current) {
@@ -100,6 +175,7 @@ export default function InGameScene({
     ) {
       return;
     }
+    playSound('hit');
     gameStore.addPoints(MONSTER_HIT_POINTS);
   };
 
@@ -174,3 +250,5 @@ export default function InGameScene({
     </>
   );
 }
+
+
