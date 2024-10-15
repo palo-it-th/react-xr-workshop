@@ -6,6 +6,7 @@ import SimpleCycleSkyBoxScene from './SkyBox/ scenes/SimpleSkyBoxScene';
 import SimpleUIScene from './UI/scenes/SimpleUIScene';
 import Simple3DRenderScene from './Basic/scenes/Simple3DRenderScene';
 import Simple3DUtilitiesScene from './Basic/scenes/Simple3DUtilitiesScene';
+import LandingScene from './LandingScene';
 
 // const store = createXRStore({
 //   frameRate: 'high',
@@ -21,22 +22,7 @@ function App() {
           
         </XR> */}
 
-        {/* Basic Render and Utilities */}
-        {/* <Simple3DRenderScene /> */}
-        <Simple3DUtilitiesScene />
-
-        {/* 3D Objects */}
-        {/* <Simple3DScene /> */}
-        {/* <Simple3DModelAnimationScene /> */}
-
-        {/* UI */}
-        {/* <SimpleUIScene /> */}
-
-        {/* SkyBox */}
-        {/* <SimpleCycleSkyBoxScene /> */}
-
-        {/* Visual Effects */}
-        {/* <SimpleVFXScene /> */}
+        <LandingScene />
       </Canvas>
     </>
   );

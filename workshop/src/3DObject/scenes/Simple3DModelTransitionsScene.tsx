@@ -18,7 +18,7 @@ export default function Simple3DModelTransitionsScene() {
 
   useEffect(() => {
     setTimeout(() => {
-      // setIsEnableAutoSpawn(true);
+      setIsEnableAutoSpawn(true);
     }, 3000);
   }, []);
 
@@ -52,9 +52,13 @@ export default function Simple3DModelTransitionsScene() {
       {/*
         Randomly spawn boxes
       */}
-      {/* <Box3D ref={refBox1} geometry={{ position: [-4, 0, -5] }} color={'red'} />
-      <Box3D ref={refBox2} geometry={{ position: [0, 0, -8] }} color={'green'} />
-      <Box3D ref={refBox3} geometry={{ position: [0, 0, 0] }} color={'blue'} /> */}
+      <Box3D ref={refBox1} geometry={{ position: [-4, 0, -5] }} color={'red'} />
+      <Box3D
+        ref={refBox2}
+        geometry={{ position: [0, 0, -8] }}
+        color={'green'}
+      />
+      <Box3D ref={refBox3} geometry={{ position: [0, 0, 0] }} color={'blue'} />
 
       {/*
         3D Transitions : Position
