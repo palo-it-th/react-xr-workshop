@@ -9,6 +9,8 @@ import AllGameScene from './scene/AllGameScene';
 // Add this line
 const store = createXRStore({
   frameRate: 'high',
+  controller: true,
+  hand: false,
 });
 
 function App() {
