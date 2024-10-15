@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame, useThree } from 'react-three-fiber';
 import { Mesh, Vector3 } from 'three';
-import { BatchedRenderer, QuarksLoader } from 'three.quarks';
+import { BatchedRenderer, IEmitter, IParticleSystem, QuarksLoader } from 'three.quarks';
 
 interface AtomProps {
   position: Vector3;
@@ -9,6 +9,8 @@ interface AtomProps {
 
 export default function Atom({ position }: AtomProps) {
   // Create a batch renderer
+  // Batch renderer is a container for particle systems
+  // It is used to render multiple particle systems in a single draw call
   const batchRenderer = useMemo(()=>{return new BatchedRenderer()}, [])
 
   useFrame((_, delta) => {
@@ -32,7 +34,8 @@ export default function Atom({ position }: AtomProps) {
         obj.traverse((child) => {
           // Add the particle emitter to the batch renderer if object node is ParticleEmitter
           if (child.type === 'ParticleEmitter') {
-            batchRenderer.addSystem((child as any).system);
+            const system : IParticleSystem = ((child as unknown) as IEmitter).system;
+            batchRenderer.addSystem(system);
           }
         });
         

@@ -1,5 +1,5 @@
 import { useThree } from '@react-three/fiber';
-import React, { useEffect, useMemo } from 'react';
+import React, { memo, useEffect, useMemo } from 'react';
 import * as THREE from 'three';
 
 const DEFAULT_SPHERE_GEOMETRY = new THREE.SphereGeometry(200, 60, 40);
@@ -17,7 +17,8 @@ const createSkyMaterial = (textureUrl: string): THREE.MeshBasicMaterial => {
   });
 };
 
-const SphereSky = ({ textureUrl }: SphereSkyProps) => {
+// Wrap component in memo to prevent re-renders
+const SphereSky = memo(({ textureUrl }: SphereSkyProps) => {
     const { scene } = useThree();
 
     // Create a sphere geometry
@@ -32,7 +33,6 @@ const SphereSky = ({ textureUrl }: SphereSkyProps) => {
     // Add the sky to the scene
     useEffect(() => {
       const sky = new THREE.Mesh(sphereGeometry, skyMaterial);
-      sky.material.side = THREE.BackSide;
       scene.add(sky);
 
       return () => {
@@ -41,6 +41,6 @@ const SphereSky = ({ textureUrl }: SphereSkyProps) => {
     }, [sphereGeometry, skyMaterial]);
 
     return <></>;
-};
+});
 
 export default SphereSky;

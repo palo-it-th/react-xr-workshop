@@ -6,12 +6,14 @@ import Atom from '../components/Atom';
 export default function SimpleVFXScene() {
   return (
     <>
+      {/* Camera control */}
       <OrbitControls />
-      <CameraShake />
       <color attach="background" args={['#111']} />
       <ambientLight intensity={2} />
+      {/* Render grids */}
       <primitive object={new AxesHelper(2)} />
       <primitive object={new GridHelper(40, 40)} />
+      {/* Render particles */}
       <Atom position={new Vector3(-4, 2, -2)} />
       <Atom position={new Vector3(0, 2, -2)} />
       <Atom position={new Vector3(4, 2, -2)} />
