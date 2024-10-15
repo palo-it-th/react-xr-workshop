@@ -4,6 +4,8 @@ import Simple3DModelAnimationScene from './3DObject/scenes/Simple3DModelAnimatio
 import SimpleVFXScene from './VFX/scenes/SimpleVFXScene';
 import SimpleCycleSkyBoxScene from './SkyBox/ scenes/SimpleSkyBoxScene';
 import SimpleUIScene from './UI/scenes/SimpleUIScene';
+import Simple3DRenderScene from './Basic/scenes/Simple3DRenderScene';
+import Simple3DUtilitiesScene from './Basic/scenes/Simple3DUtilitiesScene';
 
 // const store = createXRStore({
 //   frameRate: 'high',
@@ -15,14 +17,26 @@ function App() {
       <Canvas>
         {/* <OrbitControls /> */}
         {/* <XR store={store}>
+        
           
         </XR> */}
 
+        {/* Basic Render and Utilities */}
+        {/* <Simple3DRenderScene /> */}
+        <Simple3DUtilitiesScene />
+
+        {/* 3D Objects */}
         {/* <Simple3DScene /> */}
         {/* <Simple3DModelAnimationScene /> */}
-        { <SimpleVFXScene /> }
-        {/* <SimpleCycleSkyBoxScene /> */}
+
+        {/* UI */}
         {/* <SimpleUIScene /> */}
+
+        {/* SkyBox */}
+        {/* <SimpleCycleSkyBoxScene /> */}
+
+        {/* Visual Effects */}
+        {/* <SimpleVFXScene /> */}
       </Canvas>
     </>
   );
