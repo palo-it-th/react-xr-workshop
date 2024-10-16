@@ -7,7 +7,7 @@ export default function SimpleUIScene() {
   return (
     <>
       <OrbitControls />
-      <CameraShake />
+      {/* <CameraShake /> */}
       <color attach="background" args={['#111']} />
       <ambientLight intensity={2} />
       <primitive object={new GridHelper(40, 40)} />

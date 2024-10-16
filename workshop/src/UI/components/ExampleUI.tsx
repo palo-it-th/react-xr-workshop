@@ -1,10 +1,11 @@
 import React from 'react';
 import { Container, Root, Text } from '@react-three/uikit';
 import { Progress, Button, Card } from '@react-three/uikit-default';
+import ExampleHTML from './ExampleHTML';
 
 export default function ExampleUI() {
   return (
-    <mesh position={[0, 2, -3]}>
+    <group position={[0, 2, -3]}>
       <Root gap={20}>
         <Container>
           <Card borderRadius={32} padding={32} gap={8} flexDirection="column">
@@ -26,7 +27,10 @@ export default function ExampleUI() {
             <Text>Button</Text>
           </Button>
         </Container>
+        <Container>
+          <ExampleHTML />
+        </Container>
       </Root>
-    </mesh>
+    </group>
   );
 }
