@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import BasicBox from '../components/Box';
-import { CameraControls, Html } from '@react-three/drei';
+import { CameraControls, Html, SpotLight } from '@react-three/drei';
 
 export default function Simple3DUtilitiesScene() {
   const [enableAmbientLight, setEnableAmbientLight] = useState(false);
@@ -11,7 +11,7 @@ export default function Simple3DUtilitiesScene() {
 
   return (
     <>
-      <color attach="background" args={['#111']} />
+      {/* <color attach="background" args={['#111']} /> */}
       {/* CameraControls is a component that provides a set of controls for the camera*/}
       {enableControls && <CameraControls />}
       {/* ambientLight is a component that adds ambient light to the scene */}

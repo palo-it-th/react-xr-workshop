@@ -104,11 +104,10 @@ const TranslateScene = () => {
   const textRef = useRef<Mesh>();
   useEffect(() => {
     textRef.current?.position.copy(new Vector3(0, 2, -4));
-    ``;
   }, []);
   return (
     <>
-      <Text position={[0, 0, 0]}>position(x0,y0,z0)</Text>
+      <Text position={[0, 0, -2]}>position(x0,y0,z0)</Text>
       <Text ref={textRef}>position(x0,y2,z-4)</Text>
     </>
   );
@@ -122,7 +121,7 @@ const RotateScene = () => {
 
   return (
     <>
-      <Text position={[0, 1, -2]}>Rotation(0,1.6,0)</Text>
+      <Text position={[0, 1, -2]}>Rotation(0,0,0)</Text>
       <Text ref={textRef} position={[0, 1, -2]}>
         Rotation(0,1.6,0)
       </Text>
@@ -145,7 +144,7 @@ const ScaleScene = () => {
         Scale(2x,2x,2x)
       </Text>
 
-      <Box3D geometry={{ position: [0, 5, -6], scale: 1 }} color={'red'} />
+      <Box3D geometry={{ position: [0, 6, -4], scale: 1 }} color={'red'} />
     </>
   );
 };
