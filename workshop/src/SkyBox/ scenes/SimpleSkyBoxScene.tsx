@@ -19,9 +19,9 @@ export default function SimpleCycleSkyBoxScene() {
   return (
     <>
       <CameraControls />
-      {<SphereSky textureUrl="/sky-box/galaxy-sky.png" />}
+      {/*<SphereSky textureUrl="/sky-box/galaxy-sky.png" />*/}
       {/*<CubeSky textureUrls={CUBE_TEXTURE_URLS} />*/}
-      {/*<SolidSky color={new THREEColor('#2fc')} />*/}
+      {<SolidSky color={new THREEColor('#2fc')} />}
       {/*<PlaneSky textureUrl={'/space-sky-box-textures/1.jpg'} />*/}
     </>
   );
