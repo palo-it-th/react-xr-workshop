@@ -53,6 +53,11 @@ export default function Atom({ position }: AtomProps) {
     });
     // Add the batch renderer to the scene
     scene.add(batchRenderer);
+
+    return () => {
+      // Remove the atom from the scene
+      scene.remove(batchRenderer);
+    }
   }, []);
 
   return <></>;
