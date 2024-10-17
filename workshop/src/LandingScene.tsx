@@ -8,6 +8,7 @@ import SimpleUIScene from './UI/scenes/SimpleUIScene';
 import SimpleVFXScene from './VFX/scenes/SimpleVFXScene';
 import Simple3DModelToJSXScene from './3DObject/scenes/Simple3DModelToJSXScene';
 import Simple3DModelTransitionsScene from './3DObject/scenes/Simple3DModelTransitionsScene';
+import SimpleXRSelect from './UI/scenes/SimpleXRSelect';
 
 enum LandingSceneView {
   Landing = 'Landing',
@@ -19,6 +20,7 @@ enum LandingSceneView {
   Basic3DTransitions = '3DTransitions',
   Basic3DObjectAnimation = '3DAnimation',
   BasicUI = 'UI',
+  BasicXR = 'XR',
 }
 
 export default function LandingScene() {
@@ -103,6 +105,9 @@ export default function LandingScene() {
 
       {/* Visual Effects */}
       {currentView === LandingSceneView.BasicVFX && <SimpleVFXScene />}
+
+      {/* XR */}
+      {currentView === LandingSceneView.BasicXR && <SimpleXRSelect />}
     </>
   );
 }
