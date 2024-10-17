@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AxesHelper, GridHelper, Mesh } from 'three';
+import { AxesHelper, GridHelper, Mesh, Vector3 } from 'three';
 import { OrbitControls, Text, Html } from '@react-three/drei';
 import { Box3D } from '../components/Box';
 import { useRandomPosition } from '../hooks/useRandomPosition';
@@ -101,10 +101,15 @@ export default function Simple3DModelTransitionsScene() {
 }
 
 const TranslateScene = () => {
+  const textRef = useRef<Mesh>();
+  useEffect(() => {
+    textRef.current?.position.copy(new Vector3(0, 2, -4));
+    ``;
+  }, []);
   return (
     <>
       <Text position={[0, 0, 0]}>position(x0,y0,z0)</Text>
-      <Text position={[0, 2, -4]}>position(x0,y1,z-4)</Text>
+      <Text ref={textRef}>position(x0,y2,z-4)</Text>
     </>
   );
 };
