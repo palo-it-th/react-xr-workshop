@@ -10,20 +10,20 @@ interface CubeSkyProps {
 }
 
 const CubeSky = ({ textureUrls }: CubeSkyProps) => {
-    const { scene } = useThree();
+  const { scene } = useThree();
 
-    useEffect(() => {
-        // Load the cube textures
-        const loader = new THREE.CubeTextureLoader();
-        const textures = loader.load(textureUrls);
-        scene.background = textures;
-        return () => {
-            // Dispose the textures for cleanup memory
-            textures.dispose();
-        };
-    }, []);
+  useEffect(() => {
+    // Load the cube textures
+    const loader = new THREE.CubeTextureLoader();
+    const textures = loader.load(textureUrls);
+    scene.background = textures;
+    return () => {
+      // Dispose the textures for cleanup memory
+      textures.dispose();
+    };
+  }, []);
 
-    return <></>;
+  return <></>;
 };
 
 export default CubeSky;

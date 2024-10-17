@@ -10,20 +10,20 @@ interface PlaneSkyProps {
 }
 
 const PlaneSky = ({ textureUrl }: PlaneSkyProps) => {
-    const { scene } = useThree();
+  const { scene } = useThree();
 
-    useEffect(() => {
-        // Load the cube textures
-        const loader = new THREE.TextureLoader();
-        const texture = loader.load(textureUrl);
-        scene.background = texture;
-        return () => {
-            // Dispose the textures for cleanup memory
-            texture.dispose();
-        };
-    }, []);
+  useEffect(() => {
+    // Load the cube textures
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load(textureUrl);
+    scene.background = texture;
+    return () => {
+      // Dispose the textures for cleanup memory
+      texture.dispose();
+    };
+  }, []);
 
-    return <></>;
+  return <></>;
 };
 
 export default PlaneSky;

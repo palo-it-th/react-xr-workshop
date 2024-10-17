@@ -19,28 +19,28 @@ const createSkyMaterial = (textureUrl: string): THREE.MeshBasicMaterial => {
 
 // Wrap component in memo to prevent re-renders
 const SphereSky = memo(({ textureUrl }: SphereSkyProps) => {
-    const { scene } = useThree();
+  const { scene } = useThree();
 
-    // Create a sphere geometry
-    const sphereGeometry = useMemo(() => DEFAULT_SPHERE_GEOMETRY, []);
+  // Create a sphere geometry
+  const sphereGeometry = useMemo(() => DEFAULT_SPHERE_GEOMETRY, []);
 
-    // Create a sky material and put the texture on it
-    const skyMaterial = useMemo(
-      () => createSkyMaterial(textureUrl),
-      [textureUrl],
-    );
+  // Create a sky material and put the texture on it
+  const skyMaterial = useMemo(
+    () => createSkyMaterial(textureUrl),
+    [textureUrl],
+  );
 
-    // Add the sky to the scene
-    useEffect(() => {
-      const sky = new THREE.Mesh(sphereGeometry, skyMaterial);
-      scene.add(sky);
+  // Add the sky to the scene
+  useEffect(() => {
+    const sky = new THREE.Mesh(sphereGeometry, skyMaterial);
+    scene.add(sky);
 
-      return () => {
-        scene.remove(sky);
-      };
-    }, [sphereGeometry, skyMaterial]);
+    return () => {
+      scene.remove(sky);
+    };
+  }, [sphereGeometry, skyMaterial]);
 
-    return <></>;
+  return <></>;
 });
 
 export default SphereSky;
