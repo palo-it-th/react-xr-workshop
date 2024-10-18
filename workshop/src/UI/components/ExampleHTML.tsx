@@ -19,7 +19,7 @@ export default function HTMLExample() {
             <iframe
               width="560"
               height="315"
-              src="https://www.youtube.com/embed/ZHgyQGoeaB0?si=VRxS3J-TvLmE4cSI?&autoplay=1&loop=1&rel=0&showinfo=0&color=white&iv_load_policy=3&mute=1"
+              src="https://www.youtube.com/embed/ZHgyQGoeaB0?si=VRxS3J-TvLmE4cSI?&autoplay=1&loop=1&playlist=ZHgyQGoeaB0&rel=0&showinfo=0&color=white&iv_load_policy=3&mute=1"
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
