@@ -1,0 +1,10 @@
+version: '3.8'
+x-rebuild: &rebuild
+  build:
+    context: .
+  image: react-xr-workshop:latest
+
+services:
+  app:
+    <<: *rebuild
+    container_name: react-xr-workshop

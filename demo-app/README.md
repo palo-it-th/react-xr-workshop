@@ -43,6 +43,22 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
+## Running the Docker Container Locally
+
+To run the application in a Docker container locally, follow these steps:
+
+1. Build the Docker image:
+    ```sh
+    docker build -t react-xr-workshop .
+    ```
+
+2. Run the Docker container:
+    ```sh
+    
+    ```docker run react-xr-workshop
+
+3. Open [http://localhost](http://localhost) to view it in the browser.
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
