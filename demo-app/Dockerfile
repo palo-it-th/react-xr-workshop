@@ -7,6 +7,7 @@ WORKDIR /app
 # Copy the rest of the application code to the working directory
 COPY . .
 RUN rm -rf node_modules
+RUN ls -la
 
 # Install dependencies
 RUN npm install
