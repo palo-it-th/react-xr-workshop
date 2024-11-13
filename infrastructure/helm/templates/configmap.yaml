@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ .Values.name }}-config"
+data:
+  GENERATE_SOURCEMAP: false
+
