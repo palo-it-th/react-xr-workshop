@@ -5,7 +5,7 @@ FROM node:20
 WORKDIR /app
 
 # Copy the rest of the application code to the working directory
-COPY . .
+COPY ./demo-app .
 RUN rm -rf node_modules
 RUN ls -la
 

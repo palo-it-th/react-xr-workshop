@@ -35,7 +35,7 @@ jobs:
         with:
           push: true
           tags: ${{ env.IMAGE_NAME }}
-          file: ./demo-app/Dockerfile
+          file: Dockerfile
           cache-from: type=registry,ref=${{ env.IMAGE_NAME }}}}
           cache-to: type=inline
 
