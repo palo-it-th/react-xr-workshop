@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: "{{ .Values.name }}-config"
 data:
-  GENERATE_SOURCEMAP: false
+  GENERATE_SOURCEMAP: "false"
 

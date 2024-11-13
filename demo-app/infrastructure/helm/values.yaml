@@ -5,7 +5,7 @@ certificate:
   environment: dev
 
 image:
-  repository: paloitinternalregistry.azurecr.io/react-xr-workshop-full
+  repository: paloitinternalregistry.azurecr.io/react-xr-workshop
   pullPolicy: Always
   tag: "main"
 
