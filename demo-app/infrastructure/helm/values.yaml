@@ -7,7 +7,7 @@ certificate:
 image:
   repository: paloitinternalregistry.azurecr.io/react-xr-workshop
   pullPolicy: Always
-  tag: "main"
+  tag: {{ .Values.env.COMMIT_SHA }}
 
 service:
   type: NodePort

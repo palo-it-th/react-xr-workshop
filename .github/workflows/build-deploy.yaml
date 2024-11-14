@@ -5,12 +5,15 @@ on:
    branches:
      - main
 
+env:
+  COMMIT_SHA: ${{ github.sha }}
+
 jobs:
   build:
     name: Docker build and push image to ACR
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: paloitinternalregistry.azurecr.io/react-xr-workshop:${{ github.ref_name }}
+      IMAGE_NAME: paloitinternalregistry.azurecr.io/react-xr-workshop:${{ github.sha  }}
 
     defaults:
       run:
@@ -85,6 +88,7 @@ jobs:
           helmChart: ./demo-app/infrastructure/helm
           helm-version: "latest"
           overrides: |
+            env.COMMIT_SHA: ${{ env.COMMIT_SHA }}
             env.AZURE_CLIENT_ID: ${{ env.AZURE_CLIENT_ID }}
             env.AZURE_TENANT_ID: ${{ env.AZURE_TENANT_ID }}
         id: bake
