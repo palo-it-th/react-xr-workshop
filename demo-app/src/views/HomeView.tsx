@@ -64,6 +64,10 @@ export default function HomeView({ onGameStart }: StartGameSceneProps) {
 
       {!isStartedRef.current && (
         <Html fullscreen>
+          <div className="banner-container">
+            <img src="/colour_logo.png" alt="banner" />
+            <div className="presented">Galactic XR Shooter</div>
+          </div>
           <div className="start-game-container">
             <Button2D
               style={{ width: '400px' }}

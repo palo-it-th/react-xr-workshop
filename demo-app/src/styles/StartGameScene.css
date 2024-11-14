@@ -1,3 +1,14 @@
+.banner-container {
+    position: absolute;
+    top: 5%;
+    left: 10%;
+    right: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
 .start-game-container {
     position: absolute;
     bottom: 5%;
@@ -8,4 +19,38 @@
     justify-content: center;
     align-items: center;
     gap: 40px;
+}
+
+.presented {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #fff;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+}
+
+.presented::before,
+.presented::after {
+    content: "Galactic XR Shooter";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.presented::before {
+    color: #ff007f;
+    transform: translate(5px, 5px);
+    opacity: 0.7;
+    filter: blur(3px);
+}
+
+.presented::after {
+    color: #00e5ff;
+    transform: translate(-5px, -5px);
+    opacity: 0.7;
+    filter: blur(3px);
 }
