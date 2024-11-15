@@ -13,7 +13,7 @@ spec:
       labels:
         app: {{ .Values.name }}
       annotations:
-        commitSha: {{ .Values.env.COMMIT_SHA }}
+        commit-sha: {{ .Values.env.COMMIT_SHA }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
