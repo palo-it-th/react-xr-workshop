@@ -13,7 +13,7 @@ jobs:
     name: Docker build and push image to ACR
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: paloitinternalregistry.azurecr.io/react-xr-workshop:${{ github.sha  }}
+      IMAGE_NAME: paloitinternalregistry.azurecr.io/react-xr-workshop:${{ github.ref_name  }}
 
     defaults:
       run:

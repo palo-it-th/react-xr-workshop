@@ -12,10 +12,12 @@ spec:
     metadata:
       labels:
         app: {{ .Values.name }}
+      annotations:
+        commitSha: {{ .Values.env.COMMIT_SHA }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.env.COMMIT_SHA }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy | default "Always" }}
           ports:
             - name: http
