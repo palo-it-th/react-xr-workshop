@@ -15,4 +15,4 @@ service:
   targetPort: 80
 
 ingress:
-  host: react-xr-workshop-dev.palo-it.app
+  host: galactic-xr-shooter.palo-it.app
