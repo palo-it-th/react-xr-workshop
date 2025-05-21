@@ -7,6 +7,8 @@ import { UseSpawnMonsterBase } from '../types/common';
 
 const MONSTER_SPAWN_TIMER = 5000;
 const MONSTER_FIRST_SPAWN_TIMER = 1000;
+// Add throttling to reduce calculations
+const FRAME_SKIP = 2; // Only update every 3 frames
 
 export const useSpawnMonster = ({
   monsterRef,
@@ -27,13 +29,31 @@ export const useSpawnMonster = ({
   );
   const [firstSpawned, setFirstSpawned] = useState(false);
   const respawnIntervalIdRef = useRef<NodeJS.Timeout | null>(null);
+  // Frame counter for throttling
+  const frameCount = useRef(0);
+  // Cache target vectors to avoid creating new ones each frame
+  const targetVector = useRef(new THREE.Vector3());
+  const newPosVector = useRef(new THREE.Vector3());
+  
+  // Direction vector for lookAt calculation
+  const lookAtVector = useRef(new THREE.Vector3(0, 0, 0));
 
   const updatePosition = useCallback(() => {
     if (!monsterRef?.current || !position) {
       return;
     }
 
-    monsterRef.current.lookAt(0, 0, 0);
+    // Skip frames to reduce performance impact
+    frameCount.current = (frameCount.current + 1) % FRAME_SKIP;
+    if (frameCount.current !== 0) {
+      return;
+    }
+
+    // Only do lookAt when necessary (first time and respawn)
+    if (!monsterRef.current.userData.initialLookAtDone) {
+      monsterRef.current.lookAt(lookAtVector.current);
+      monsterRef.current.userData.initialLookAtDone = true;
+    }
 
     if (!firstSpawned) {
       monsterRef.current.position.copy(position);
@@ -41,15 +61,21 @@ export const useSpawnMonster = ({
     }
 
     if (isMonsterDead) {
-      const newX = position.x > 0 ? position.x + 5 : position.x - 5;
-      const newY = position.y > 0 ? position.y + 5 : position.y - 5;
-      const targetPos = new THREE.Vector3(newX, newY, position.z - 20);
-      const newPos = monsterRef.current.position.clone().lerp(targetPos, 0.1);
-      monsterRef.current.position.copy(newPos);
+      // Avoid creating new Vector3 instances every frame
+      targetVector.current.set(
+        position.x > 0 ? position.x + 5 : position.x - 5,
+        position.y > 0 ? position.y + 5 : position.y - 5,
+        position.z - 20
+      );
+      
+      // Reuse the cached vector instead of creating a new one
+      monsterRef.current.position.lerp(targetVector.current, 0.1);
     } else {
-      const targetPos = new THREE.Vector3(position.x, position.y, position.z);
-      const newPos = monsterRef.current.position.clone().lerp(targetPos, 0.1);
-      monsterRef.current.position.copy(newPos);
+      // Avoid creating new Vector3 instances
+      targetVector.current.copy(position);
+      
+      // Reuse the cached vector instead of creating a new one with clone()
+      monsterRef.current.position.lerp(targetVector.current, 0.1);
     }
   }, [position, isMonsterDead, firstSpawned, monsterRef]);
 
@@ -62,6 +88,10 @@ export const useSpawnMonster = ({
       respawnIntervalIdRef.current = setInterval(() => {
         const newPosition = randomPositionVector3();
         setPosition(newPosition);
+        // Reset lookAt flag when respawning
+        if (monsterRef?.current) {
+          monsterRef.current.userData.initialLookAtDone = false;
+        }
         onMonsterSpawned && onMonsterSpawned(newPosition);
       }, respawnTimer);
     } else {

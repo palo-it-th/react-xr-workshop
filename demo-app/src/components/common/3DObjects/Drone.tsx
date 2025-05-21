@@ -8,7 +8,7 @@ Title: Pearl Drone - Splatoon Side Order Trailer
 */
 
 import * as THREE from 'three';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { useGraph } from '@react-three/fiber';
 import { useGLTF, useAnimations, Box } from '@react-three/drei';
 import { GLTF, SkeletonUtils } from 'three-stdlib';
@@ -19,6 +19,9 @@ import {
 } from '../../../types/common';
 import { useSpawnMonster } from '../../../hooks/useSpawnMonster';
 import { RigidBody } from '@react-three/rapier';
+import { applyLODToGroup } from '../../../utils/lodOptimization';
+import { useCameraPosition } from '../../../hooks/useCameraPosition';
+import { useInteractionStore } from '../../../state/interactionStore';
 
 type ActionName = 'Vertical';
 
@@ -58,6 +61,49 @@ type GLTFResult = GLTF & {
 type MergedActionProps = MonsterModelBase<ActionName> & UseSpawnMonsterBase;
 type DroneActionProps = Omit<MergedActionProps, 'monsterRef' | 'isMonsterDead'>;
 
+// Create optimized materials (only do this once)
+const optimizedMaterials = {
+  // Cache for optimized materials
+  cache: new Map<string, THREE.Material>(),
+  
+  // Get optimized version of a material
+  get(originalMaterial: THREE.Material, name: string) {
+    if (this.cache.has(name)) {
+      return this.cache.get(name)!;
+    }
+    
+    let material: THREE.Material;
+    
+    // Convert expensive materials to cheaper alternatives
+    if (originalMaterial instanceof THREE.MeshPhysicalMaterial) {
+      material = new THREE.MeshStandardMaterial({
+        color: originalMaterial.color,
+        map: originalMaterial.map,
+        emissive: originalMaterial.emissive,
+        emissiveMap: originalMaterial.emissiveMap,
+        roughness: originalMaterial.roughness,
+        metalness: originalMaterial.metalness,
+        transparent: originalMaterial.transparent,
+        opacity: originalMaterial.opacity,
+      });
+    } else {
+      // For other materials, just clone
+      material = originalMaterial.clone();
+    }
+    
+    // Lower precision if it's not the eye (which needs to be visible)
+    if (!name.includes('Eye')) {
+      if (material instanceof THREE.MeshStandardMaterial) {
+        material.roughness = Math.min(material.roughness + 0.2, 1.0);
+        material.metalness = Math.max(material.metalness - 0.2, 0);
+      }
+    }
+    
+    this.cache.set(name, material);
+    return material;
+  }
+};
+
 const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
   const {
     objectID,
@@ -73,17 +119,34 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
   } = props;
 
   const modelRef = useRef<THREE.Group>(null);
-
   const { scene, animations } = useGLTF('/3D-models/drone.glb');
-  const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene]);
+  const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
   const { nodes, materials } = useGraph(clone) as GLTFResult;
   const { actions } = useAnimations(animations, modelRef);
+  
+  // Track camera position for LOD optimization
+  const cameraPositionRef = useCameraPosition();
+  
+  // Create a simplified collision box to make raycasting more efficient
+  const collisionBoxRef = useRef<THREE.Mesh>(null);
+  const isDead = monsterActionState === MonsterCurrentState.DEAD;
+
+  // Use optimized materials
+  const optimizedMaterialsRef = useMemo(() => {
+    return {
+      MainBody: optimizedMaterials.get(materials.MainBody, 'MainBody'),
+      EyeEmit: optimizedMaterials.get(materials.EyeEmit, 'EyeEmit'),
+      EyeGlass: optimizedMaterials.get(materials.EyeGlass, 'EyeGlass'), 
+      Crown: optimizedMaterials.get(materials.Crown, 'Crown'),
+      UnderGlass: optimizedMaterials.get(materials.UnderGlass, 'UnderGlass')
+    };
+  }, [materials]);
 
   useSpawnMonster({
     monsterRef: modelRef,
     respawnTimer,
     firstSpawnTimer,
-    isMonsterDead: monsterActionState === MonsterCurrentState.DEAD,
+    isMonsterDead: isDead,
     initialPosition,
     onMonsterSpawned: (position) => {
       onMonsterSpawnedByObjectId?.(objectID, position);
@@ -104,8 +167,47 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
     }
   }, [triggerAction, stopAction, stopAllActions, actions]);
 
+  // Apply LOD optimization based on camera distance
+  useEffect(() => {
+    // Throttle the LOD updates to every 500ms to avoid excessive recalculations
+    const lodUpdateInterval = setInterval(() => {
+      if (modelRef.current && cameraPositionRef.current) {
+        applyLODToGroup(modelRef.current, cameraPositionRef.current);
+      }
+    }, 500);
+    
+    return () => {
+      clearInterval(lodUpdateInterval);
+    };
+  }, []);
+
+  // Handle click events through the collision box instead of the complex mesh
+  const handleClick = (e: any) => {
+    e.stopPropagation();
+    
+    // Use the interaction store to throttle interactions
+    const interactionStore = useInteractionStore.getState();
+    
+    if (interactionStore.canInteract()) {
+      interactionStore.setFocusedObject(objectID);
+      
+      if (props.onClick) {
+        props.onClick(e);
+      }
+    }
+  };
+
   return (
-    <group ref={modelRef} {...props} dispose={null}>
+    <group ref={modelRef} {...props} dispose={null} onClick={undefined}>
+      {/* Invisible collision box for raycasting - much more efficient */}
+      <Box 
+        ref={collisionBoxRef}
+        args={[2, 2, 2]} 
+        position={[0, 0, 0]}
+        visible={false}
+        onClick={handleClick}
+      />
+      
       <group name="Sketchfab_Scene">
         <group
           name="Sketchfab_model"
@@ -128,7 +230,7 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
                   <mesh
                     name="Plane_MainBody_0"
                     geometry={nodes.Plane_MainBody_0.geometry}
-                    material={materials.MainBody}
+                    material={optimizedMaterialsRef.MainBody}
                   />
                 </group>
                 <group
@@ -140,7 +242,7 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
                   <mesh
                     name="Plane001_MainBody_0"
                     geometry={nodes.Plane001_MainBody_0.geometry}
-                    material={materials.MainBody}
+                    material={optimizedMaterialsRef.MainBody}
                   />
                 </group>
                 <group
@@ -152,7 +254,7 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
                   <mesh
                     name="Plane002_MainBody_0"
                     geometry={nodes.Plane002_MainBody_0.geometry}
-                    material={materials.MainBody}
+                    material={optimizedMaterialsRef.MainBody}
                   />
                 </group>
                 <group
@@ -164,7 +266,7 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
                   <mesh
                     name="Plane003_MainBody_0"
                     geometry={nodes.Plane003_MainBody_0.geometry}
-                    material={materials.MainBody}
+                    material={optimizedMaterialsRef.MainBody}
                   />
                 </group>
                 <group
@@ -192,7 +294,7 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
                           <mesh
                             name="Circle008_EyeEmit_0"
                             geometry={nodes.Circle008_EyeEmit_0.geometry}
-                            material={materials.EyeEmit}
+                            material={optimizedMaterialsRef.EyeEmit}
                           />
                         </group>
                         <group
@@ -204,13 +306,13 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
                           <mesh
                             name="Circle009_EyeEmit_0"
                             geometry={nodes.Circle009_EyeEmit_0.geometry}
-                            material={materials.EyeEmit}
+                            material={optimizedMaterialsRef.EyeEmit}
                           />
                         </group>
                         <mesh
                           name="Plane004_EyeGlass_0"
                           geometry={nodes.Plane004_EyeGlass_0.geometry}
-                          material={materials.EyeGlass}
+                          material={optimizedMaterialsRef.EyeGlass}
                         />
                       </group>
                       <group
@@ -221,7 +323,7 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
                         <mesh
                           name="Circle005_MainBody_0"
                           geometry={nodes.Circle005_MainBody_0.geometry}
-                          material={materials.MainBody}
+                          material={optimizedMaterialsRef.MainBody}
                         />
                       </group>
                       <group
@@ -232,7 +334,7 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
                         <mesh
                           name="Circle004_MainBody_0"
                           geometry={nodes.Circle004_MainBody_0.geometry}
-                          material={materials.MainBody}
+                          material={optimizedMaterialsRef.MainBody}
                         />
                       </group>
                       <group
@@ -244,13 +346,13 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
                           <mesh
                             name="Circle003_MainBody_0"
                             geometry={nodes.Circle003_MainBody_0.geometry}
-                            material={materials.MainBody}
+                            material={optimizedMaterialsRef.MainBody}
                           />
                         </group>
                         <mesh
                           name="Circle001_Crown_0"
                           geometry={nodes.Circle001_Crown_0.geometry}
-                          material={materials.Crown}
+                          material={optimizedMaterialsRef.Crown}
                         />
                       </group>
                       <group
@@ -262,18 +364,18 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
                         <mesh
                           name="Circle007_MainBody_0"
                           geometry={nodes.Circle007_MainBody_0.geometry}
-                          material={materials.MainBody}
+                          material={optimizedMaterialsRef.MainBody}
                         />
                       </group>
                       <mesh
                         name="Circle_MainBody_0"
                         geometry={nodes.Circle_MainBody_0.geometry}
-                        material={materials.MainBody}
+                        material={optimizedMaterialsRef.MainBody}
                       />
                       <mesh
                         name="Circle_UnderGlass_0"
                         geometry={nodes.Circle_UnderGlass_0.geometry}
-                        material={materials.UnderGlass}
+                        material={optimizedMaterialsRef.UnderGlass}
                       />
                     </group>
                     <primitive object={nodes._rootJoint} />
@@ -285,7 +387,7 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
                     <skinnedMesh
                       name="Object_16"
                       geometry={nodes.Object_16.geometry}
-                      material={materials.MainBody}
+                      material={optimizedMaterialsRef.MainBody}
                       skeleton={nodes.Object_16.skeleton}
                     />
                   </group>
