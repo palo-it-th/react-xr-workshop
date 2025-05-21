@@ -16,6 +16,7 @@ import { GameSceneView, MonsterCurrentState } from '../types/common';
 import PreStartGameView from './PreStartGameView';
 import EndGameView from './EndGameView';
 import { useSound } from '../hooks/useSound';
+import FrameRateDisplay from '../components/common/UI/FrameRateDisplay';
 
 const MONSTER_HIT_POINTS = 50;
 
@@ -127,9 +128,14 @@ export default function InGameScene({
     }, 3000);
   }, []);
 
-  useFrame(() => {
-    adjustBoardPosition();
-  });
+  useEffect(() => {
+    if (scoreBoardRef.current) {
+      scoreBoardRef.current.lookAt(1, 0, 0);
+    }
+    if (timeBoardRef.current) {
+      timeBoardRef.current.lookAt(-1, 0, 0);
+    }
+  },[scoreBoardRef.current,timeBoardRef.current]);
 
   useEffect(() => {
     if (!isGameStarted) return;
@@ -159,14 +165,6 @@ export default function InGameScene({
     }
   }, [isGameEnded]);
 
-  const adjustBoardPosition = () => {
-    if (scoreBoardRef.current) {
-      scoreBoardRef.current.lookAt(1, 0, 0);
-    }
-    if (timeBoardRef.current) {
-      timeBoardRef.current.lookAt(-1, 0, 0);
-    }
-  };
 
   const onHitMonster = (id: string) => {
     if (
@@ -246,6 +244,11 @@ export default function InGameScene({
             gameStore.restartGame();
           }}
         />
+      )}
+      
+      {/* Always show framerate during game (both in-game and ended states) */}
+      {(shouldDisplayStarted || isGameEnded) && (
+        <FrameRateDisplay position={[2, 1.5, -5]} />
       )}
     </>
   );
