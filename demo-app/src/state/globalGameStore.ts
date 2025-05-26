@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import { v4 as uuid } from 'uuid';
 import { Vector3 } from 'three';
+import { v4 as uuid } from 'uuid';
+import { create } from 'zustand';
 
 import {
   GameSceneView,
@@ -9,7 +9,7 @@ import {
   MonsterStateBase,
 } from '../types/common';
 
-const GAME_TIME = 30;
+const GAME_TIME = 90;
 
 export const useGlobalGameStore = create<GlobalGameState>((set) => ({
   // Manage game view state
