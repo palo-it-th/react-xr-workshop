@@ -204,7 +204,7 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
       {/* Invisible collision box for raycasting - much more efficient */}
       <Box
         ref={collisionBoxRef}
-        args={[0.8, 0.8, 0]}
+        args={[0.8, 0.8, 0.8]}
         position={[0, 0, 0]}
         visible={false}
         onClick={handleClick}
