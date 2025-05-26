@@ -43,12 +43,6 @@ export const useSpawnMonster = ({
       return;
     }
 
-    // Skip frames to reduce performance impact
-    frameCount.current = (frameCount.current + 1) % FRAME_SKIP;
-    if (frameCount.current !== 0) {
-      return;
-    }
-
     // Only do lookAt when necessary (first time and respawn)
     if (!monsterRef.current.userData.initialLookAtDone) {
       monsterRef.current.lookAt(lookAtVector.current);
