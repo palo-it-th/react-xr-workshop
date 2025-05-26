@@ -7,21 +7,23 @@ Source: https://sketchfab.com/3d-models/pearl-drone-splatoon-side-order-trailer-
 Title: Pearl Drone - Splatoon Side Order Trailer
 */
 
+import React, { useEffect, useMemo, useRef } from 'react';
+
 import * as THREE from 'three';
-import React, { useEffect, useRef, useMemo } from 'react';
-import { useGraph } from '@react-three/fiber';
-import { useGLTF, useAnimations, Box } from '@react-three/drei';
 import { GLTF, SkeletonUtils } from 'three-stdlib';
+
+import { Box, useAnimations, useGLTF } from '@react-three/drei';
+import { useGraph } from '@react-three/fiber';
+
+import { useCameraPosition } from '../../../hooks/useCameraPosition';
+import { useSpawnMonster } from '../../../hooks/useSpawnMonster';
+import { useInteractionStore } from '../../../state/interactionStore';
 import {
   MonsterCurrentState,
   MonsterModelBase,
   UseSpawnMonsterBase,
 } from '../../../types/common';
-import { useSpawnMonster } from '../../../hooks/useSpawnMonster';
-import { RigidBody } from '@react-three/rapier';
 import { applyLODToGroup } from '../../../utils/lodOptimization';
-import { useCameraPosition } from '../../../hooks/useCameraPosition';
-import { useInteractionStore } from '../../../state/interactionStore';
 
 type ActionName = 'Vertical';
 
@@ -65,15 +67,15 @@ type DroneActionProps = Omit<MergedActionProps, 'monsterRef' | 'isMonsterDead'>;
 const optimizedMaterials = {
   // Cache for optimized materials
   cache: new Map<string, THREE.Material>(),
-  
+
   // Get optimized version of a material
   get(originalMaterial: THREE.Material, name: string) {
     if (this.cache.has(name)) {
       return this.cache.get(name)!;
     }
-    
+
     let material: THREE.Material;
-    
+
     // Convert expensive materials to cheaper alternatives
     if (originalMaterial instanceof THREE.MeshPhysicalMaterial) {
       material = new THREE.MeshStandardMaterial({
@@ -90,7 +92,7 @@ const optimizedMaterials = {
       // For other materials, just clone
       material = originalMaterial.clone();
     }
-    
+
     // Lower precision if it's not the eye (which needs to be visible)
     if (!name.includes('Eye')) {
       if (material instanceof THREE.MeshStandardMaterial) {
@@ -98,10 +100,10 @@ const optimizedMaterials = {
         material.metalness = Math.max(material.metalness - 0.2, 0);
       }
     }
-    
+
     this.cache.set(name, material);
     return material;
-  }
+  },
 };
 
 const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
@@ -123,10 +125,10 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
   const { nodes, materials } = useGraph(clone) as GLTFResult;
   const { actions } = useAnimations(animations, modelRef);
-  
+
   // Track camera position for LOD optimization
   const cameraPositionRef = useCameraPosition();
-  
+
   // Create a simplified collision box to make raycasting more efficient
   const collisionBoxRef = useRef<THREE.Mesh>(null);
   const isDead = monsterActionState === MonsterCurrentState.DEAD;
@@ -136,9 +138,9 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
     return {
       MainBody: optimizedMaterials.get(materials.MainBody, 'MainBody'),
       EyeEmit: optimizedMaterials.get(materials.EyeEmit, 'EyeEmit'),
-      EyeGlass: optimizedMaterials.get(materials.EyeGlass, 'EyeGlass'), 
+      EyeGlass: optimizedMaterials.get(materials.EyeGlass, 'EyeGlass'),
       Crown: optimizedMaterials.get(materials.Crown, 'Crown'),
-      UnderGlass: optimizedMaterials.get(materials.UnderGlass, 'UnderGlass')
+      UnderGlass: optimizedMaterials.get(materials.UnderGlass, 'UnderGlass'),
     };
   }, [materials]);
 
@@ -175,7 +177,7 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
         applyLODToGroup(modelRef.current, cameraPositionRef.current);
       }
     }, 500);
-    
+
     return () => {
       clearInterval(lodUpdateInterval);
     };
@@ -184,13 +186,13 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
   // Handle click events through the collision box instead of the complex mesh
   const handleClick = (e: any) => {
     e.stopPropagation();
-    
+
     // Use the interaction store to throttle interactions
     const interactionStore = useInteractionStore.getState();
-    
+
     if (interactionStore.canInteract()) {
       interactionStore.setFocusedObject(objectID);
-      
+
       if (props.onClick) {
         props.onClick(e);
       }
@@ -200,14 +202,14 @@ const Drone = (props: JSX.IntrinsicElements['group'] & DroneActionProps) => {
   return (
     <group ref={modelRef} {...props} dispose={null} onClick={undefined}>
       {/* Invisible collision box for raycasting - much more efficient */}
-      <Box 
+      <Box
         ref={collisionBoxRef}
-        args={[2, 2, 2]} 
+        args={[0.8, 0.8, 0]}
         position={[0, 0, 0]}
         visible={false}
         onClick={handleClick}
       />
-      
+
       <group name="Sketchfab_Scene">
         <group
           name="Sketchfab_model"

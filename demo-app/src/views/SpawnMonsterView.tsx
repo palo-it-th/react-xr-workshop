@@ -1,15 +1,16 @@
 import React, { useEffect, useMemo, useRef } from 'react';
+
 import { Vector3 } from 'three';
 import { v4 as uuid } from 'uuid';
 
+import Drone from '../components/common/3DObjects/Drone';
+import BangExplosion from '../components/common/Particles/BangExplosion';
 import { useGlobalGameStore } from '../state/globalGameStore';
-import { MonsterCurrentState } from '../types/common';
 import {
   PositionScene,
   useGlobalPositionStore,
 } from '../state/globalUsedPositionStore';
-import Drone from '../components/common/3DObjects/Drone';
-import BangExplosion from '../components/common/Particles/BangExplosion';
+import { MonsterCurrentState } from '../types/common';
 
 const MONSTER_COUNT = 6;
 const REMOVE_DEAD_MONSTER_TIMER = 500;
